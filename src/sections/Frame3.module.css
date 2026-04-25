@@ -115,13 +115,10 @@
   display: block;
 }
 
-/* Selected tile: bird photo, contained so nothing gets cropped.              */
+/* Selected tile: bird photo — same sizing as the silhouette so there's no
+   visible size jump when the src swaps from SVG to PNG.                      */
 .tileImgPhoto {
   object-fit: contain;
-  width: 70%;
-  height: 70%;
-  max-width: 100%;
-  max-height: 100%;
 }
 
 /* ── Trend indicator icon ─────────────────────────────────────────────────── */

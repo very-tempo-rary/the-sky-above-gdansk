@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styles from './NavButton.module.css'
 import ArrowUp   from '@assets/svg/ui/Direction=Up.svg?react'
 import ArrowDown from '@assets/svg/ui/Direction=Down.svg?react'
@@ -25,18 +24,13 @@ export default function NavButton({
   backLabel     = 'Back',
   continueLabel = 'Continue',
 }: NavButtonProps) {
-  const [backHovered,     setBackHovered]     = useState(false)
-  const [continueHovered, setContinueHovered] = useState(false)
-
   return (
     <div className={styles.wrap}>
 
       {/* Back — up arrow on the left */}
       <button
-        className={`${styles.btn} ${backHovered ? styles.backActive : ''}`}
+        className={`${styles.btn} ${styles.backBtn}`}
         onClick={onBack}
-        onMouseEnter={() => setBackHovered(true)}
-        onMouseLeave={() => setBackHovered(false)}
         aria-label={backLabel}
       >
         <span className={styles.arrowWrap}>
@@ -58,10 +52,8 @@ export default function NavButton({
 
       {/* Continue — down arrow on the right */}
       <button
-        className={`${styles.btn} ${continueHovered ? styles.continueActive : ''}`}
+        className={`${styles.btn} ${styles.continueBtn}`}
         onClick={onContinue}
-        onMouseEnter={() => setContinueHovered(true)}
-        onMouseLeave={() => setContinueHovered(false)}
         aria-label={continueLabel}
       >
         <span className={styles.label}>{continueLabel}</span>

@@ -48,26 +48,32 @@ interface BirdDef {
 // bird2 is scaled by (118/160) to stay proportional to the same reference.
 const BASE_SIZE = 180   // display size for the 160×160 canvas
 const BIRDS: BirdDef[] = [
-  { src: bird1,  left: 0.76, top: 0.13, size: BASE_SIZE, rot: -10,
+  // bird1 — large, top-right
+  { src: bird1,  left: 0.76, top: 0.12, size: BASE_SIZE, rot: -10,
     fromDir: 'topRight',
     sway: { x: 25, y: -20, rot:  7, dur: 3.4 }, delay: 0.10 },
-  { src: birdA,  left: 0.16, top: 0.41, size: BASE_SIZE, rot:  8,
-    fromDir: 'left',
-    sway: { x: -21, y: 25, rot: -6, dur: 2.7 }, delay: 0.25 },
-  // bird2 (cursor bird): 118×79 canvas — size scaled proportionally to BASE_SIZE
-  { src: bird2,  left: 0.34, top: 0.31, size: Math.round(118 / 160 * BASE_SIZE), heightAspect: 79 / 118, rot:  5,
+  // birdA — spread wings, upper-left
+  { src: birdA,  left: 0.21, top: 0.25, size: BASE_SIZE, rot:  8,
     fromDir: 'topLeft',
+    sway: { x: -21, y: 25, rot: -6, dur: 2.7 }, delay: 0.25 },
+  // bird2 (cursor bird): 118×79 canvas — center, slightly right
+  { src: bird2,  left: 0.54, top: 0.30, size: Math.round(118 / 160 * BASE_SIZE), heightAspect: 79 / 118, rot:  5,
+    fromDir: 'top',
     sway: { x: 18, y: -22, rot:  6, dur: 3.1 }, delay: 0.00, isCursorBird: true },
-  { src: bird3,  left: 0.24, top: 0.57, size: BASE_SIZE, rot: 12,
-    fromDir: 'left',
-    sway: { x: -22, y: 21, rot: -8, dur: 2.5 }, delay: 0.35 },
-  { src: bird4,  left: 0.68, top: 0.52, size: BASE_SIZE, rot: -5,
+  // bird3 — small silhouette, lower-right
+  { src: bird3,  left: 0.79, top: 0.68, size: BASE_SIZE, rot: -6,
+    fromDir: 'bottomRight',
+    sway: { x: 22, y: -18, rot:  8, dur: 2.5 }, delay: 0.35 },
+  // bird4 — diving, right-center
+  { src: bird4,  left: 0.67, top: 0.50, size: BASE_SIZE, rot: -5,
     fromDir: 'right',
     sway: { x: 20, y: 22, rot:  6, dur: 3.8 }, delay: 0.20 },
+  // bird5 — duck, lower-center
   { src: bird5,  left: 0.43, top: 0.76, size: BASE_SIZE, rot:  0,
     fromDir: 'bottom',
     sway: { x: 22, y: -26, rot: -6, dur: 3.2 }, delay: 0.40 },
-  { src: bird6,  left: 0.31, top: 0.70, size: BASE_SIZE, rot: -8,
+  // bird6 — duck, lower-left
+  { src: bird6,  left: 0.21, top: 0.63, size: BASE_SIZE, rot: -8,
     fromDir: 'bottomLeft',
     sway: { x: -21, y: -22, rot:  7, dur: 2.9 }, delay: 0.30 },
 ]

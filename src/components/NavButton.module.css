@@ -48,7 +48,7 @@
   width: 16px;
   height: 16px;
   display: block;
-  transition: transform 0.25s ease;
+  transition: transform 0.45s ease;
   /* The clone SVGs sit outside the visible clip box (top:100% / top:-100%).
      Without this they can still receive pointer events through the overflow:hidden
      area, triggering the sibling button's hover state when the cursor passes nearby. */
@@ -57,13 +57,13 @@
 
 /* ── Back: up-conveyor ───────────────────────────────────────────────────────
    Clone starts below (top:100%), both move up on hover (translateY -100%).
-   The .active class is toggled via React state — zero CSS-hover involvement.  */
+   Pure CSS :hover — strictly bound to cursor position, no React state race.  */
 .backClone {
   top: 100%;
 }
 
-.backActive .backArrow,
-.backActive .backClone {
+.backBtn:hover .backArrow,
+.backBtn:hover .backClone {
   transform: translateY(-100%);
 }
 
@@ -73,7 +73,7 @@
   top: -100%;
 }
 
-.continueActive .continueArrow,
-.continueActive .continueClone {
+.continueBtn:hover .continueArrow,
+.continueBtn:hover .continueClone {
   transform: translateY(100%);
 }

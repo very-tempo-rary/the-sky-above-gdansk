@@ -264,7 +264,7 @@ export default function Frame2() {
         {/* ── Zoom-phase text group (Frames 9–10) ─────────────────────── */}
         <div className={styles.zoomGroup} ref={zoomGroupRef}>
           <h2 className={styles.zoomTitle} ref={zoomTitleRef}>
-            Twelve ways to live<br />in the city
+            Twelve ways to live in the city
           </h2>
           <p className={styles.zoomBody} ref={zoomBodyRef}>
             There are several species that chose Gdańsk precisely{' '}

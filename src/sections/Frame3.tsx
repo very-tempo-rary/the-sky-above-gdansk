@@ -204,16 +204,18 @@ export default function Frame3() {
   // produces after unlockScroll() recalibrates its internal scroll from 0 → actual.
   const suppressLockRef  = useRef(false)
 
-  // Helper — resets tiles and grid to the pre-animation "hidden + scattered" state.
+  // Helper — resets tiles, grid and detail panel to the pre-animation hidden state.
   // Called both from useEffect (initial mount) and from handleBack (before leaving).
   function resetToHidden() {
-    const tiles = tileRefs.current.filter(Boolean) as HTMLDivElement[]
-    const grid  = gridRef.current
+    const tiles  = tileRefs.current.filter(Boolean) as HTMLDivElement[]
+    const grid   = gridRef.current
+    const detail = detailRef.current
     tiles.forEach((tile, i) => {
       const [dx, dy] = FLY_FROM[i] ?? [0, -500]
       gsap.set(tile, { x: dx, y: dy, opacity: 0 })
     })
-    if (grid) gsap.set(grid, { opacity: 0 })
+    if (grid)   gsap.set(grid,   { opacity: 0 })
+    if (detail) gsap.set(detail, { opacity: 0 })
   }
 
   useEffect(() => {
@@ -305,24 +307,33 @@ export default function Frame3() {
 
   // ── Navigation handlers ──────────────────────────────────────────────────────
   function handleBack() {
-    // Pause any in-progress fly-in and reset to hidden so Frame3 is invisible
-    // when the user scrolls back down — the animation will restart cleanly.
     tlRef.current?.pause()
-    resetToHidden()
 
-    // Do NOT kill the lockTrigger — it must re-fire if the user scrolls back down.
-    unlockScroll()
-    // Land on "Twelve ways to live in the city" — the final readable state of
-    // Frame2's timeline (zoomTitle + zoomBody both fully visible, t≈17).
-    const frame2 = document.getElementById('frame2')
-    const frame3 = document.getElementById('frame3')
-    if (frame2 && frame3) {
-      const frame2Y  = frame2.getBoundingClientRect().top + window.scrollY
-      const frame3Y  = frame3.getBoundingClientRect().top + window.scrollY
-      const depth    = frame3Y - frame2Y
-      const target   = frame2Y + depth * (17 / 19.5)
-      window.scrollTo({ top: target, behavior: 'instant' })
-    }
+    // Fade the scene out upward first, then instant-scroll — mirrors the
+    // smooth float-in that Frame4's Back uses when returning here.
+    const scene = document.getElementById('frame3-scene')
+    gsap.to(scene ?? [], {
+      opacity: 0,
+      y: -48,
+      duration: 0.35,
+      ease: 'power2.in',
+      onComplete: () => {
+        resetToHidden()   // scatters tiles + hides grid & detail
+        // Restore scene so the next fly-in starts from a clean state
+        if (scene) gsap.set(scene, { clearProps: 'transform,opacity' })
+
+        unlockScroll()
+        // Land on "Twelve ways to live in the city" (t≈17 in Frame2 timeline)
+        const frame2 = document.getElementById('frame2')
+        const frame3 = document.getElementById('frame3')
+        if (frame2 && frame3) {
+          const frame2Y = frame2.getBoundingClientRect().top + window.scrollY
+          const frame3Y = frame3.getBoundingClientRect().top + window.scrollY
+          const depth   = frame3Y - frame2Y
+          window.scrollTo({ top: frame2Y + depth * (17 / 19.5), behavior: 'instant' })
+        }
+      },
+    })
   }
 
   function handleContinue() {
