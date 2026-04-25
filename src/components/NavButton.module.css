@@ -40,7 +40,9 @@
   flex-shrink: 0;
 }
 
-/* Shared base for every arrow SVG: fill the clip box, animate transform */
+/* Shared base for every arrow SVG: fill the clip box.
+   No transition here — reset on mouse-leave is instant.
+   Transition is declared only inside :hover so it fires on the way IN only. */
 .arrowSvg {
   position: absolute;
   top: 0;
@@ -48,10 +50,6 @@
   width: 16px;
   height: 16px;
   display: block;
-  transition: transform 0.45s ease;
-  /* The clone SVGs sit outside the visible clip box (top:100% / top:-100%).
-     Without this they can still receive pointer events through the overflow:hidden
-     area, triggering the sibling button's hover state when the cursor passes nearby. */
   pointer-events: none;
 }
 
@@ -65,6 +63,7 @@
 .backBtn:hover .backArrow,
 .backBtn:hover .backClone {
   transform: translateY(-100%);
+  transition: transform 0.45s ease;
 }
 
 /* ── Continue: down-conveyor ─────────────────────────────────────────────────
@@ -76,4 +75,5 @@
 .continueBtn:hover .continueArrow,
 .continueBtn:hover .continueClone {
   transform: translateY(100%);
+  transition: transform 0.45s ease;
 }
