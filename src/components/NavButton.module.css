@@ -1,0 +1,79 @@
+/* ── Button group wrapper ────────────────────────────────────────────────────
+   Back and Continue sit on one line, right-aligned, 64px apart.              */
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 64px;
+}
+
+/* ── Individual button ───────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ── Label ───────────────────────────────────────────────────────────────── */
+.label {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  line-height: 1;
+}
+
+/* ── Arrow conveyor container ────────────────────────────────────────────────
+   Clips the two stacked arrow SVGs. overflow: hidden must be on THIS element.
+   The SVGs are absolutely positioned, so they don't affect the container size. */
+.arrowWrap {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Shared base for every arrow SVG: fill the clip box, animate transform */
+.arrowSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  display: block;
+  transition: transform 0.25s ease;
+  /* The clone SVGs sit outside the visible clip box (top:100% / top:-100%).
+     Without this they can still receive pointer events through the overflow:hidden
+     area, triggering the sibling button's hover state when the cursor passes nearby. */
+  pointer-events: none;
+}
+
+/* ── Back: up-conveyor ───────────────────────────────────────────────────────
+   Clone starts below (top:100%), both move up on hover (translateY -100%).
+   The .active class is toggled via React state — zero CSS-hover involvement.  */
+.backClone {
+  top: 100%;
+}
+
+.backActive .backArrow,
+.backActive .backClone {
+  transform: translateY(-100%);
+}
+
+/* ── Continue: down-conveyor ─────────────────────────────────────────────────
+   Clone starts above (top:-100%), both move down on hover (translateY +100%). */
+.continueClone {
+  top: -100%;
+}
+
+.continueActive .continueArrow,
+.continueActive .continueClone {
+  transform: translateY(100%);
+}

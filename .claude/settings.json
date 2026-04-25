@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"C:\\Users\\AlicjaKot\\Desktop\\Interactive Data Viz Course\\Assignment Kill Me\\The sky above Gdansk\" && npx --yes wait-on tcp:5173 --timeout 1000 2>/dev/null || (npm run dev &) && echo '{\"systemMessage\": \"Dev server started on http://localhost:5173\"}'",
+            "shell": "powershell",
+            "timeout": 15,
+            "statusMessage": "Starting dev server…",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}

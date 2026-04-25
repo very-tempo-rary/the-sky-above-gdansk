@@ -1,0 +1,25 @@
+@import '@fontsource/source-serif-4/400.css';
+@import '@fontsource/source-serif-4/400-italic.css';
+@import '@fontsource/source-code-pro/500.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Source Serif 4', serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: none;        /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none;                /* Chrome / Safari / Edge */
+}
+
+body {
+  overflow-x: hidden;
+  background-color: #087BFF; /* prevents white flash / margins when sections don't cover the full page */
+}

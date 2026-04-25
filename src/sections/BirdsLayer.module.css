@@ -1,0 +1,21 @@
+/* ── Full-scene overlay for the ambient bird flock ─────────────────────────── */
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;      /* clips birds while they're flying outside the scene  */
+  z-index: 0;            /* behind stat text (z-index on stat set separately)   */
+}
+
+/* Each bird is positioned by its centre point via negative margins in JSX.    */
+.bird {
+  position: absolute;
+  /* GSAP owns transform — no CSS transform here to avoid conflicts.            */
+}
+
+.bird img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}

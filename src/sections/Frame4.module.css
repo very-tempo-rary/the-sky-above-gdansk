@@ -1,0 +1,340 @@
+/* ── Scene ────────────────────────────────────────────────────────────────── */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background-color: #087BFF;
+  overflow: hidden;
+  display: flex;
+}
+
+/* ── Map ──────────────────────────────────────────────────────────────────── */
+.mapWrap {
+  /* Match Figma: 879×509px centred vertically, left: 40px */
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(100% - 480px - 40px);   /* fill space left of panel, with 40px left margin */
+  max-width: 879px;
+  aspect-ratio: 879 / 509;
+}
+
+.mapSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* ── District path highlighting ──────────────────────────────────────────────
+   Uses :global() to escape CSS Module scoping and target SVG path IDs.
+   Path IDs identified via isPointInFill() test against each bird's position. */
+
+/* Base: reset all paths to the district blue (overrides SVG presentation attrs,
+   including path1334 whose SVG default fallback is white) */
+.scene :global(#gdansk-districts path) {
+  fill: #0069D9;
+  fill-opacity: 1;
+  transition: fill 0.3s ease, fill-opacity 0.3s ease;
+}
+
+/* Letnica — swifts */
+.scene[data-initiative="swifts"] :global(#path1334) {
+  fill: #ffffff;
+  fill-opacity: 0.9;
+}
+
+/* Oliwa — bird-feeder AND falcon-cam share the same polygon */
+.scene[data-initiative="bird-feeder"] :global(#path1380),
+.scene[data-initiative="falcon-cam"] :global(#path1380) {
+  fill: #ffffff;
+  fill-opacity: 0.9;
+}
+
+/* Suchanino — civic-budget */
+.scene[data-initiative="civic-budget"] :global(#path10171) {
+  fill: #ffffff;
+  fill-opacity: 0.9;
+}
+
+/* Śródmieście — falco-gedanense */
+.scene[data-initiative="falco-gedanense"] :global(#path4962) {
+  fill: #ffffff;
+  fill-opacity: 0.9;
+}
+
+/* Stogi — bird-island */
+.scene[data-initiative="bird-island"] :global(#path2080) {
+  fill: #ffffff;
+  fill-opacity: 0.9;
+}
+
+/* Sobieszewo — seagull-shoal */
+.scene[data-initiative="seagull-shoal"] :global(#path1316) {
+  fill: #ffffff;
+  fill-opacity: 0.9;
+}
+
+/* ── Spotlight ────────────────────────────────────────────────────────────── */
+/* A plain <div> wrapper does the positioning — SVG elements use their viewBox
+   as an intrinsic size which prevents left+right from computing the width.
+   The wrapper div has no intrinsic size so width = sceneW − left − 480 ✓.
+   left is set per-initiative via inline style; right: 480px = panel border.
+   Fixed 810px height (Figma canvas) centred vertically, matching the map. */
+.spotlightOverlay {
+  position: absolute;
+  right: 480px;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.spotlightSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Title ────────────────────────────────────────────────────────────────── */
+.title {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 39px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.1;
+  color: #fff;
+  white-space: nowrap;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+  pointer-events: none;
+}
+
+/* ── Bird hotspots ────────────────────────────────────────────────────────── */
+.hotspot {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  /* centre the box on the coordinate point */
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Inactive hotspots float above the active tile so nearby birds remain clickable
+     even when their button overlaps the larger active tile image (e.g. Oliwa pair). */
+  z-index: 2;
+}
+
+/* Active hotspot sits below inactive neighbours — keeps click targets unobstructed. */
+.hotspotActive {
+  z-index: 1;
+}
+
+/* Inactive: silhouette recoloured to #262626 (brightness(0) pushes to black,
+   invert(15%) lifts to rgb(38,38,38) = #262626) */
+.hotspotImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(15%);
+  transition: filter 0.2s ease;
+}
+
+/* Hover: add a #fff layer at 5% opacity → lifts to ~#313131 */
+.hotspot:hover .hotspotImg {
+  filter: brightness(0) invert(19%);
+}
+
+/* Active: tile photo displayed at the same natural proportions as the silhouette.
+   Both SVGs and tile PNGs are 240×240 containers from Figma — no zoom needed. */
+.hotspotImgActive {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── District label ───────────────────────────────────────────────────────── */
+.districtLabel {
+  position: absolute;
+  margin: 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+  /* left = district centre x %, top = calc(district-top% - 24px).
+     translate(-50%, -100%) centres horizontally and puts the label's
+     bottom edge exactly at the top value → 24 px gap above the district. */
+  transform: translate(-50%, -100%);
+}
+
+/* ── Note (bottom-left) ───────────────────────────────────────────────────── */
+.note {
+  position: absolute;
+  left: 22px;
+  bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
+}
+
+.noteIcon {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-right: -24px;
+}
+
+.noteText {
+  margin: 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+/* ── Navigation buttons ───────────────────────────────────────────────────── */
+/* right: 480px panel + 40px gap = 520px from the right edge.                 */
+.navBtnWrap {
+  position: absolute;
+  right: 520px;
+  bottom: 40px;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+/* ── Side panel ───────────────────────────────────────────────────────────── */
+.panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 480px;
+  height: 100%;
+  border-left: 1px solid rgba(255, 255, 255, 0.6);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
+}
+
+.panelInner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px;
+  min-height: 100%;
+}
+
+/* ── Photo ────────────────────────────────────────────────────────────────── */
+.photoWrap {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Initiative name ──────────────────────────────────────────────────────── */
+.initiativeName {
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 34px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.1;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+.initiativeNameItalic {
+  font-style: italic;
+}
+
+/* ── Polish name ──────────────────────────────────────────────────────────── */
+.polishName {
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 19px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.5;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+/* ── Tag set ──────────────────────────────────────────────────────────────── */
+.tagSet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 4px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border: 0.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 500px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.tagLabel {
+  opacity: 0.75;
+}
+
+/* ── Body paragraphs ──────────────────────────────────────────────────────── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.bodyParagraph {
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 19px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+.bodyParagraph em {
+  font-style: italic;
+}

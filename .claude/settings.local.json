@@ -1,0 +1,58 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -p PRD.zip word/document.xml)",
+      "Bash(node -e ':*)",
+      "Bash(npm run:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/34475f34-a2fe-4690-8dc7-a75537ac8432\" -o water.svg)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/3479b950-ed8b-43e2-a0b6-da3e89e09a80\" -o forests.svg)",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/93349950-b24e-4a1c-aee5-ca5dee565e03\" -o urban.svg)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/vite-plugin-svgr/package.json'\\).version\\)\")",
+      "mcp__0f6a7a75-20c5-453b-a511-fe93b3fd6f2b__get_design_context",
+      "Bash(pandoc --track-changes=all PRD.docx -o PRD_extracted.md)",
+      "Bash(python C:/Users/AlicjaKot/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/cc0208c6-9aad-45ca-bc78-f18c811d22c5/6b19ff01-d5fe-444b-aa8d-29b5b9ec8ba6/skills/docx/scripts/office/unpack.py 'C:/Users/AlicjaKot/Desktop/Interactive Data Viz Course/Assignment Kill Me/The sky above Gdansk/PRD.docx' /tmp/prd_unpacked/)",
+      "Bash(py --version)",
+      "Bash(npx vite:*)",
+      "mcp__Figma__get_screenshot",
+      "mcp__0f6a7a75-20c5-453b-a511-fe93b3fd6f2b__get_metadata",
+      "mcp__0f6a7a75-20c5-453b-a511-fe93b3fd6f2b__use_figma",
+      "mcp__Figma__get_design_context",
+      "Bash(python3 -)",
+      "Bash(node -)",
+      "mcp__Figma__get_metadata",
+      "Bash(node -e ' *)",
+      "Bash(dir /s /b \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\assets\")",
+      "Bash(findstr -i spotlight)",
+      "PowerShell(Get-ChildItem -Recurse \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\assets\" | Where-Object { $_.Name -imatch \"spotlight\" } | Select-Object FullName)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(node -e \"const s=require\\('./.claude/settings.local.json'\\); const h=s.hooks.SessionStart[0].hooks[0]; console.log\\('event: SessionStart'\\); console.log\\('shell:', h.shell\\); console.log\\('async:', h.async\\); console.log\\('command:', h.command\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('C:\\\\\\\\\\\\\\\\Users\\\\\\\\\\\\\\\\AlicjaKot\\\\\\\\\\\\\\\\.claude\\\\\\\\\\\\\\\\projects\\\\\\\\\\\\\\\\C--Users-AlicjaKot-Desktop-Interactive-Data-Viz-Course-Assignment-Kill-Me-The-sky-above-Gdansk\\\\\\\\\\\\\\\\8d630443-894f-4dcc-a5d5-9187b90dfff9\\\\\\\\\\\\\\\\tool-results\\\\\\\\\\\\\\\\mcp-0f6a7a75-20c5-453b-a511-fe93b3fd6f2b-get_metadata-1776939171753.txt','utf8'\\)\\); const xml=data[0].text; const frames=xml.match\\(/id=\\\\\"[^\\\\\"]+\\\\\" name=\\\\\"Frame[^\\\\\"]*\\\\\"|id=\\\\\"[^\\\\\"]+\\\\\" name=\\\\\"Part[^\\\\\"]*\\\\\"|id=\\\\\"[^\\\\\"]+\\\\\" name=\\\\\"[^\\\\\"]*[Tt]ile[^\\\\\"]*\\\\\"|id=\\\\\"[^\\\\\"]+\\\\\" name=\\\\\"[^\\\\\"]*[Mm]ap[^\\\\\"]*\\\\\"|id=\\\\\"[^\\\\\"]+\\\\\" name=\\\\\"[^\\\\\"]*[Bb]ack[^\\\\\"]*\\\\\"|id=\\\\\"[^\\\\\"]+\\\\\" name=\\\\\"[^\\\\\"]*[Cc]ontinue[^\\\\\"]*\\\\\"/g\\); console.log\\(frames && frames.slice\\(0,60\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(powershell -Command \"Get-Content 'C:\\\\Users\\\\AlicjaKot\\\\.claude\\\\projects\\\\C--Users-AlicjaKot-Desktop-Interactive-Data-Viz-Course-Assignment-Kill-Me-The-sky-above-Gdansk\\\\8d630443-894f-4dcc-a5d5-9187b90dfff9\\\\tool-results\\\\mcp-0f6a7a75-20c5-453b-a511-fe93b3fd6f2b-get_metadata-1776939171753.txt' | ConvertFrom-Json | Select-Object -ExpandProperty text | Select-String -Pattern 'name=\\\\\"\\(Frame|Part|Back|Continue|button|tile|map\\)' -AllMatches | Select-Object -ExpandProperty Matches | Select-Object -ExpandProperty Value | Select-Object -First 60\")",
+      "Bash(dir /s /b \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\src\\\\assets\\\\svg\\\\ui\")",
+      "PowerShell(Get-ChildItem -Recurse \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\src\\\\assets\" | Where-Object { $_.Extension -eq '.svg' } | Select-Object FullName | Select-Object -First 30)",
+      "Read(//c/Users/AlicjaKot/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/7ae67794-e5c1-446e-ae72-0fe8319a4fa1/17f199dd-6ec6-4fcf-9ba7-aee49f5b1f72/skills/docx/**)",
+      "Bash(extract-text \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD.docx\")",
+      "Bash(pandoc \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD.docx\" -t markdown)",
+      "Bash(python \"C:\\\\Users\\\\AlicjaKot\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-sessions\\\\skills-plugin\\\\7ae67794-e5c1-446e-ae72-0fe8319a4fa1\\\\17f199dd-6ec6-4fcf-9ba7-aee49f5b1f72\\\\skills\\\\docx\\\\scripts\\\\office\\\\unpack.py\" \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD.docx\" \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD_unpacked\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not (netstat -an | Select-String ':5173')) { Set-Location 'C:\\Users\\AlicjaKot\\Desktop\\Interactive Data Viz Course\\Assignment Kill Me\\The sky above Gdansk'; npm run dev }",
+            "shell": "powershell",
+            "statusMessage": "Starting dev server...",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}

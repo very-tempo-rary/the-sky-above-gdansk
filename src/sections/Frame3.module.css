@@ -1,0 +1,264 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Frame 3 — Bird gallery  (one-shot fly-in + interactive panel)
+   Layout: 200vh sticky wrapper → 100vh scene (50% tile grid | 50% detail)
+
+   The sticky scene appears right where Frame2 ends (same solid-blue viewport).
+   Tile animation fires on every forward entry — replays if the user navigates
+   back to Frame2 and returns. Grid overflows internally so the user can scroll
+   all four tile rows without the animation disassembling.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Scroll wrapper ───────────────────────────────────────────────────────── */
+/* 200vh gives ~100vh of dwell time after the 1.4s fly-in completes.          */
+/* background-color prevents the body showing through when the sticky scene
+   exits the viewport at the bottom of the dwell phase.                       */
+.wrapper {
+  height: 200vh;
+  background-color: #087BFF;
+}
+
+/* ── Sticky scene ─────────────────────────────────────────────────────────── */
+.scene {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-color: #087BFF;
+  overflow: hidden;
+}
+
+/* ── Left: tile grid ──────────────────────────────────────────────────────── */
+/* Seamless 1px white border grid — container carries top + left border,      */
+/* each tile carries right + bottom → single-pixel lines everywhere, no gap.  */
+/* Tile height = min(width, (100vh − 40px) / 3).                              */
+/*   • The min() keeps tiles as close to square as possible (width = 50vw/3)  */
+/*   • The (100vh − 40px) / 3 cap guarantees exactly 3 full rows fit on-screen*/
+/*     with 40 px of the 4th row always peeking — the scroll hint.            */
+.grid {
+  flex: 0 0 50%;
+  align-self: stretch;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: min(calc(50vw / 3), calc((100vh - 40px) / 3));
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-left: 1px solid rgba(255, 255, 255, 0.6);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.grid::-webkit-scrollbar { display: none; }
+
+/* ── Individual tile ──────────────────────────────────────────────────────── */
+.tile {
+  min-height: 0;              /* allow tile to shrink to row height             */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: #087BFF;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  /* will-change is applied/removed in JS around the fly-in so it doesn't cause
+     GPU-compositing artefacts (disappearing 1px borders) in the resting state */
+}
+
+.tile:hover:not(.tileSelected) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Selected tile — white background */
+.tileSelected {
+  background-color: #fff;
+  cursor: default;
+}
+
+/* ── Tile species name ────────────────────────────────────────────────────── */
+.tileName {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  display: block;
+  flex-shrink: 0;
+}
+
+.tileSelected .tileName {
+  color: #006BE5;
+}
+
+/* ── Silhouette / tile photo area ─────────────────────────────────────────── */
+.tileSilhouette {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 6px 0;
+  min-height: 0;
+}
+
+/* Silhouette SVG: fill="#262626" baked in — no filter needed.                */
+.tileImg {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Selected tile: bird photo, contained so nothing gets cropped.              */
+.tileImgPhoto {
+  object-fit: contain;
+  width: 70%;
+  height: 70%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* ── Trend indicator icon ─────────────────────────────────────────────────── */
+.trendIcon {
+  display: block;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+/* On selected (white bg) tile: override baked-in white fill to page-blue */
+.trendIconSelected path {
+  fill: #087BFF;
+}
+
+/* ── Right: detail panel ──────────────────────────────────────────────────── */
+.detail {
+  flex: 0 0 50%;
+  position: relative;        /* anchor for the floating nav                    */
+  display: flex;
+  flex-direction: column;
+  padding: 40px 40px 88px;   /* extra bottom clearance for the floating nav    */
+  overflow-y: auto;
+  scrollbar-width: none;     /* hide scrollbar — prevents layout shifts that   */
+}                            /* would cause Back/Continue cross-hover glitches */
+.detail::-webkit-scrollbar { display: none; }
+
+/* Floating nav — absolutely positioned so it never shifts when detail scrolls */
+.detailNav {
+  position: absolute;
+  bottom: 48px;
+  left: 40px;
+  right: 40px;
+}
+
+/* Content fades in on species change (key-forced remount) */
+.detailContent {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: detailFadeIn 0.25s ease forwards;
+}
+
+@keyframes detailFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Bird photo */
+.detailPhoto {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Text block */
+.detailText {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.detailName {
+  font-family: 'Source Serif 4', serif;
+  font-size: 39px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+.detailPolish {
+  font-family: 'Source Serif 4', serif;
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.1;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+  margin-top: -14px;
+}
+
+.detailDesc {
+  font-family: 'Source Serif 4', serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+/* ── Tags row ─────────────────────────────────────────────────────────────── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 6px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 39px;
+  padding: 0 16px;
+  border: 0.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 500px;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.tag strong {
+  font-weight: 500;
+}
+
+/* Muted label prefix — matches the .tagLabel pattern in Frame4 */
+.tagLabel {
+  opacity: 0.7;
+}
+
+.tagTrendIcon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+/* Tiles are square (aspect-ratio: 1/1) so proportions always preserved.      */
+/* Precise breakpoints to be added when provided.                             */
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
