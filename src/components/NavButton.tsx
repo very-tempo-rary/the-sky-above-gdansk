@@ -1,33 +1,59 @@
 import styles from './NavButton.module.css'
-import ArrowUp   from '@assets/svg/ui/Direction=Up.svg?react'
-import ArrowDown from '@assets/svg/ui/Direction=Down.svg?react'
+import ArrowUp      from '@assets/svg/ui/Direction=Up.svg?react'
+import ArrowDown    from '@assets/svg/ui/Direction=Down.svg?react'
+import ArrowLeftAlt from '@assets/svg/ui/Direction=Left alt.svg?react'
 
 interface NavButtonProps {
-  onBack:         () => void
-  onContinue:     () => void
-  backLabel?:     string
-  continueLabel?: string
+  onBack:          () => void
+  onContinue:      () => void
+  onRestart:       () => void
+  backLabel?:      string
+  continueLabel?:  string
+  restartLabel?:   string
 }
 
 /**
- * Shared Back + Continue navigation button pair.
+ * Restart + Back + Continue navigation button set.
  *
- * Hover animation: the arrow "conveyor-belts" — slides out in the direction
- * it points while an identical clone slides in from the opposite side.
- *
- * Hover state is tracked via React state (not CSS :hover) so the two buttons
- * can never accidentally activate each other's animation.
+ * Hover animation: the arrow "conveyor-belts" out in the direction it points
+ * while a clone slides in from the opposite side (one-way — no reverse on leave).
+ * Label text becomes underlined on hover.
  */
 export default function NavButton({
   onBack,
   onContinue,
+  onRestart,
   backLabel     = 'Back',
   continueLabel = 'Continue',
+  restartLabel  = 'Restart',
 }: NavButtonProps) {
   return (
     <div className={styles.wrap}>
 
-      {/* Back — up arrow on the left */}
+      {/* Restart — left arrow, leftward conveyor */}
+      <button
+        className={`${styles.btn} ${styles.restartBtn}`}
+        onClick={onRestart}
+        aria-label={restartLabel}
+      >
+        <span className={styles.arrowWrap}>
+          <ArrowLeftAlt
+            className={`${styles.arrowSvg} ${styles.restartArrow}`}
+            aria-hidden="true"
+            width={16}
+            height={16}
+          />
+          <ArrowLeftAlt
+            className={`${styles.arrowSvg} ${styles.restartClone}`}
+            aria-hidden="true"
+            width={16}
+            height={16}
+          />
+        </span>
+        <span className={styles.label}>{restartLabel}</span>
+      </button>
+
+      {/* Back — up arrow, upward conveyor */}
       <button
         className={`${styles.btn} ${styles.backBtn}`}
         onClick={onBack}
@@ -50,7 +76,7 @@ export default function NavButton({
         <span className={styles.label}>{backLabel}</span>
       </button>
 
-      {/* Continue — down arrow on the right */}
+      {/* Continue — down arrow, downward conveyor */}
       <button
         className={`${styles.btn} ${styles.continueBtn}`}
         onClick={onContinue}

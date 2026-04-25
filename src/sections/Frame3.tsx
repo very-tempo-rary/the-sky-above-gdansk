@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import styles from './Frame3.module.css'
 import NavButton from '../components/NavButton'
 import { lockScroll, unlockScroll } from '../utils/scrollLock'
+import { restartExperience } from '../utils/restartExperience'
 
 // ── SVG silhouettes (fill="#262626" baked in — no filter needed) ──────────────
 import sil00 from '@assets/svg/silhouettes/vector.svg'
@@ -54,6 +55,7 @@ import TrendModerateDecline from '@assets/svg/ui/Trend=Moderate decline, State=D
 import TrendStable          from '@assets/svg/ui/Trend=Stable, State=Default.svg?react'
 import TrendModerateGrowth  from '@assets/svg/ui/Trend=Moderate growth, State=Default.svg?react'
 import TrendNone            from '@assets/svg/ui/Trend=None, State=Default.svg?react'
+import InfoIcon             from '@assets/svg/ui/Shape=Info.svg?react'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -193,7 +195,8 @@ const FLY_FROM: [number, number][] = [
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Frame3() {
-  const [selected, setSelected] = useState('seagull')
+  const [selected,     setSelected]     = useState('seagull')
+  const [tooltipOpen, setTooltipOpen] = useState(false)
   const wrapperRef       = useRef<HTMLDivElement>(null)
   const gridRef          = useRef<HTMLDivElement>(null)
   const tileRefs         = useRef<(HTMLDivElement | null)[]>([])
@@ -306,6 +309,12 @@ export default function Frame3() {
   }, [])
 
   // ── Navigation handlers ──────────────────────────────────────────────────────
+  function handleRestart() {
+    tlRef.current?.pause()
+    resetToHidden()
+    restartExperience()
+  }
+
   function handleBack() {
     tlRef.current?.pause()
 
@@ -354,6 +363,9 @@ export default function Frame3() {
     }
     lockScroll()
   }
+
+  // Close tooltip whenever the user switches species
+  useEffect(() => { setTooltipOpen(false) }, [selected])
 
   const sp = SPECIES.find(s => s.id === selected) ?? SPECIES[0]
   const TrendIcon = TREND_ICON[sp.trend]
@@ -447,7 +459,30 @@ export default function Frame3() {
           </div>
 
           <div className={styles.detailNav}>
-            <NavButton onBack={handleBack} onContinue={handleContinue} />
+            <NavButton onBack={handleBack} onContinue={handleContinue} onRestart={handleRestart} />
+          </div>
+
+          {/* ── Tooltip: data-source info ──────────────────────────────────── */}
+          <div className={styles.tooltip}>
+            <button
+              className={`${styles.tooltipBtn} ${tooltipOpen ? styles.tooltipBtnActive : ''}`}
+              onClick={() => setTooltipOpen(o => !o)}
+              aria-label="About this data"
+              aria-expanded={tooltipOpen}
+            >
+              <InfoIcon width={24} height={24} aria-hidden="true" />
+            </button>
+
+            {tooltipOpen && (
+              <div className={styles.tooltipPanel}>
+                <p className={styles.tooltipText}>
+                  Trend types (Growth, decline, etc.) from &ldquo;Monitoring of Birds of Poland&rdquo; / &ldquo;Monitoring Ptaków Polski&rdquo; published in the &ldquo;Nature Monitoring Bulletin&rdquo; / &ldquo;Biuletyn monitoringu przyrody&rdquo; no. 28 (2024).
+                </p>
+                <p className={styles.tooltipText}>
+                  Monitoring of Birds of Poland is a government program implemented in Poland in 2006, to fill requirements of the EU Bird Directive: the effective protection and monitor favourable conservation status of endangered species.
+                </p>
+              </div>
+            )}
           </div>
 
         </div>

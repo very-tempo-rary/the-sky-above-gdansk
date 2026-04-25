@@ -37,7 +37,8 @@
       "Bash(extract-text \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD.docx\")",
       "Bash(pandoc \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD.docx\" -t markdown)",
       "Bash(python \"C:\\\\Users\\\\AlicjaKot\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-sessions\\\\skills-plugin\\\\7ae67794-e5c1-446e-ae72-0fe8319a4fa1\\\\17f199dd-6ec6-4fcf-9ba7-aee49f5b1f72\\\\skills\\\\docx\\\\scripts\\\\office\\\\unpack.py\" \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD.docx\" \"C:\\\\Users\\\\AlicjaKot\\\\Desktop\\\\Interactive Data Viz Course\\\\Assignment Kill Me\\\\The sky above Gdansk\\\\PRD_unpacked\")",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(python -c ' *)"
     ]
   },
   "hooks": {

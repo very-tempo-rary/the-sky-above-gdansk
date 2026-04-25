@@ -1,10 +1,10 @@
 /* ── Button group wrapper ────────────────────────────────────────────────────
-   Back and Continue sit on one line, right-aligned, 64px apart.              */
+   Restart, Back and Continue sit on one line, right-aligned, 40px apart.      */
 .wrap {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 64px;
+  gap: 40px;
 }
 
 /* ── Individual button ───────────────────────────────────────────────────── */
@@ -27,6 +27,11 @@
   letter-spacing: 0.05em;
   color: #fff;
   line-height: 1;
+}
+
+/* Underline label text on hover (one-way — no transition back on leave) */
+.btn:hover .label {
+  text-decoration: underline;
 }
 
 /* ── Arrow conveyor container ────────────────────────────────────────────────
@@ -53,9 +58,21 @@
   pointer-events: none;
 }
 
+/* ── Restart: left-conveyor ──────────────────────────────────────────────────
+   Clone starts to the right (left: 100%), both move left on hover.            */
+.restartClone {
+  left: 100%;
+}
+
+.restartBtn:hover .restartArrow,
+.restartBtn:hover .restartClone {
+  transform: translateX(-100%);
+  transition: transform 0.45s ease;
+}
+
 /* ── Back: up-conveyor ───────────────────────────────────────────────────────
-   Clone starts below (top:100%), both move up on hover (translateY -100%).
-   Pure CSS :hover — strictly bound to cursor position, no React state race.  */
+   Clone starts below (top: 100%), both move up on hover (translateY -100%).
+   Pure CSS :hover — strictly bound to cursor position, no React state race.   */
 .backClone {
   top: 100%;
 }
@@ -67,7 +84,7 @@
 }
 
 /* ── Continue: down-conveyor ─────────────────────────────────────────────────
-   Clone starts above (top:-100%), both move down on hover (translateY +100%). */
+   Clone starts above (top: -100%), both move down on hover (translateY +100%). */
 .continueClone {
   top: -100%;
 }

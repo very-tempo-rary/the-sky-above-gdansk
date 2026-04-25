@@ -86,6 +86,10 @@ export default function BirdsLayer() {
   // Stores the cursor position captured at flyIn time so flyOut can send
   // the cursor bird back to exactly where it came from.
   const activeCursorFrom = useRef<{ x: number; y: number } | null>(null)
+  // True during the first RAF tick so the spurious onEnter+onLeave that GSAP
+  // fires when the page is loaded at a scroll position past the trigger zone
+  // (e.g. after a refresh on Frame3/4) are silently ignored.
+  const ignoreInitRef   = useRef(true)
 
   useEffect(() => {
     const vpW = window.innerWidth
@@ -136,7 +140,7 @@ export default function BirdsLayer() {
 
     // ── Fly-in ───────────────────────────────────────────────────────────────
     function flyIn() {
-      if (stateRef.current === 'in') return
+      if (ignoreInitRef.current || stateRef.current === 'in') return
       stateRef.current = 'in'
 
       if (flyOutTimer.current) {
@@ -236,6 +240,7 @@ export default function BirdsLayer() {
     }
 
     function scheduleFlyOut() {
+      if (ignoreInitRef.current) return
       if (flyOutTimer.current) clearTimeout(flyOutTimer.current)
       flyOutTimer.current = setTimeout(() => {
         flyOutTimer.current = null
@@ -273,7 +278,12 @@ export default function BirdsLayer() {
       onLeaveBack: () => scheduleFlyOut(),
     })
 
+    // Clear the init guard after one frame — GSAP's initial synchronous refresh
+    // has already fired by this point, so real user-scroll callbacks will work.
+    const initRaf = requestAnimationFrame(() => { ignoreInitRef.current = false })
+
     return () => {
+      cancelAnimationFrame(initRaf)
       st.kill()
       birds.forEach((_, i) => { swayTweens.current[i]?.kill() })
       if (flyOutTimer.current) clearTimeout(flyOutTimer.current)

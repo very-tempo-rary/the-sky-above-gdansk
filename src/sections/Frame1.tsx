@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import styles from './Frame1.module.css'
 import { setLastCursorPos, setCursorHideFn } from '../utils/cursorStore'
+
+gsap.registerPlugin(ScrollToPlugin)
 
 import cloud1 from '@assets/images/clouds/1-white.png'
 import cloud2 from '@assets/images/clouds/2-white.png'
@@ -20,11 +23,11 @@ interface CloudConfig {
 
 // Bigger, slower clouds — varied vertical positions
 const CLOUDS: CloudConfig[] = [
-  { src: cloud2, top: 52, width: 680, duration: 75 },
-  { src: cloud5, top:  7, width: 420, duration: 55 },
-  { src: cloud1, top: 60, width: 580, duration: 90 },
-  { src: cloud3, top: 22, width: 380, duration: 65 },
-  { src: cloud4, top: 38, width: 500, duration: 80 },
+  { src: cloud2, top: 45, width: 680, duration: 75 },
+  { src: cloud5, top:  3, width: 420, duration: 55 },
+  { src: cloud1, top: 53, width: 580, duration: 90 },
+  { src: cloud3, top: 16, width: 380, duration: 65 },
+  { src: cloud4, top: 31, width: 500, duration: 80 },
 ]
 
 const BG_COLORS = ['#087BFF', '#E3D3E4', '#FF6E61', '#A4E7E9', '#65CCFF', '#087BFF']
@@ -125,7 +128,10 @@ export default function Frame1() {
 
       <button
         className={styles.arrow}
-        onClick={() => document.getElementById('frame2')?.scrollIntoView({ behavior: 'smooth' })}
+        onClick={() => {
+          const frame2 = document.getElementById('frame2')
+          if (frame2) gsap.to(window, { scrollTo: frame2.offsetTop + 10, duration: 1, ease: 'power2.inOut' })
+        }}
         aria-label="Scroll to next section"
       >
         <img src={arrowSvg} width={64} height={64} alt="" />

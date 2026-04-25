@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import styles from './Frame4.module.css'
 import NavButton from '../components/NavButton'
 import { lockScroll, unlockScroll } from '../utils/scrollLock'
+import { restartExperience } from '../utils/restartExperience'
 
 // ── Map SVG (inline via ?react so we can highlight district paths with CSS) ───
 import GdanskMap from '@assets/svg/map/gdansk-districts.svg?react'
@@ -276,6 +277,8 @@ export default function Frame4() {
   }
 
   // ── Navigation handlers ──────────────────────────────────────────────────────
+  function handleRestart() { restartExperience() }
+
   function handleBack() {
     unlockScroll()
     const frame3 = document.getElementById('frame3')
@@ -390,13 +393,13 @@ export default function Frame4() {
       <div className={styles.note}>
         <img src={noteIconSvg} alt="" className={styles.noteIcon} />
         <p className={styles.noteText}>
-          Click on the bird silhouettes to find out about each project
+          Click on the birds to find out about each project
         </p>
       </div>
 
       {/* ── Navigation buttons ───────────────────────────────────────────── */}
       <div className={styles.navBtnWrap}>
-        <NavButton onBack={handleBack} onContinue={handleContinue} />
+        <NavButton onBack={handleBack} onContinue={handleContinue} onRestart={handleRestart} />
       </div>
 
       {/* ── Side panel ───────────────────────────────────────────────────── */}
