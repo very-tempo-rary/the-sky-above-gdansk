@@ -188,13 +188,13 @@
   bottom: 32px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   pointer-events: none;
 }
 
 .noteIcon {
-  width: 52px;
-  height: 52px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   flex-shrink: 0;
 }

@@ -1,0 +1,301 @@
+/* ── Scene ────────────────────────────────────────────────────────────────── */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background-color: #262626;
+  overflow: hidden;
+  display: flex;
+}
+
+/* ── Title — top-left, Figma: left 40 top 40, w 277, 39px ───────────────── */
+.title {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  width: 277px;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 39px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+  z-index: 10;
+  pointer-events: none;
+}
+.title p {
+  margin: 0;
+}
+
+/* ── Before/After toggle ──────────────────────────────────────────────────── */
+.toggle {
+  position: absolute;
+  right: calc(480px + 50px);
+  top: 40px;
+  display: flex;
+  gap: 4px;
+  z-index: 20;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 103px;
+  padding: 16px;
+  border: 1px solid #fff;
+  border-radius: 500px;
+  background: none;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.toggleBtnActive {
+  background: #fff;
+  color: #262626;
+}
+
+/* ── Building area (everything left of panel) ─────────────────────────────── */
+.buildingArea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 480px;
+  bottom: 0;
+  overflow: hidden;
+}
+
+/* ── Building SVG wrapper — centred within building area ──────────────────── */
+/* 540px ≈ Figma spec; clamp to building area minus 80px breathing room       */
+.buildingWrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(540px, calc(100% - 80px));
+  pointer-events: none;
+}
+
+.buildingImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Flying bird silhouette on building ──────────────────────────────────── */
+/* Sizes are controlled per-bird via inline styles (buildingSize property).   */
+/* Most birds: 120px container; swift/redstart: 160px; jackdaw: 65px.        */
+.birdSilWrap {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+/* ── Handle dot — pixel-perfect from Figma "Handle alt" SVG assets ──────── */
+/*                                                                             */
+/* Inactive  : 24 px disc @ 20% white + 8 px ring (stroke-only) inside       */
+/* Active    : 24 px disc @ 40% white + 8 px solid dot + 56 px glow @ 20%   */
+/*             (Figma outer ellipse: 56 px = 24 + 2×16, fill-opacity 0.2)    */
+/*             + subtle pulsing on the outer glow                             */
+.handle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);  /* selectedFalse background */
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Inner ring: inset-[33.33%] → 8×8 px, stroke-only (matches Figma default) */
+.handle::after {
+  content: '';
+  position: absolute;
+  top: 33.33%;
+  left: 33.33%;
+  right: 33.33%;
+  bottom: 33.33%;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  background: transparent;
+}
+
+.handle:disabled {
+  cursor: default;
+}
+
+/* Active / selected — Figma "selected: true" state */
+.handleActive {
+  background: rgba(255, 255, 255, 0.4);        /* selectedTrue bg */
+  box-shadow: 0 0 0 16px rgba(255, 255, 255, 0.2); /* outer glow, 56 px total */
+  animation: handlePulse 2.4s ease-in-out infinite;
+}
+
+/* Inner dot becomes solid white when active */
+.handleActive::after {
+  background: #fff;
+  border-color: #fff;
+}
+
+/* Subtle pulse: outer glow breathes from 56 px → 64 px while fading */
+@keyframes handlePulse {
+  0%, 100% { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0.20); }
+  50%       { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0.08); }
+}
+
+/* ── Bird hover label — appears below the active handle dot ──────────────── */
+/* Shown for whichever bird is hovered; centred on the handle's x position.   */
+.birdLabel {
+  position: absolute;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Right panel ─────────────────────────────────────────────────────────── */
+.panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 480px;
+  height: 100%;
+  border-left: 1px solid rgba(255, 255, 255, 0.6);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0 80px;
+  box-sizing: border-box;
+}
+
+/* Hide scrollbar */
+.panel::-webkit-scrollbar { display: none; }
+.panel { scrollbar-width: none; }
+
+/* ── Panel bird entry ─────────────────────────────────────────────────────── */
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 0 24px;
+  padding: 18px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.entryActive {
+  background: #fff;
+}
+
+/* ── Panel icon ───────────────────────────────────────────────────────────── */
+/* 64px container clips the 104px SVG → bird visible ~56px (same ratio as    */
+/* building silhouettes). Active: overflow:visible, 104×104 photo shows the  */
+/* full tile at the same outer size as the SVG — ratio ≈ 1.86:1.             */
+.iconWrap {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Active (Before state only): let the 104px photo overflow the 64px box */
+.iconWrapActive {
+  overflow: visible;
+}
+
+/* In After state: dim only the icon, leave text + box interaction intact */
+.iconWrapDimmed {
+  opacity: 0.35;
+}
+
+/* Silhouette: 104px SVG centred in 64px container — bird ~56px visible */
+.iconImg {
+  display: block;
+  width: 104px;
+  height: 104px;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Active (After state): faded tile photo — same geometry as iconImgActive, reduced opacity */
+.iconImgFaded {
+  display: block;
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+}
+
+/* Active (Before state only): tile photo at 104×104px, centred on same axis */
+.iconImgActive {
+  display: block;
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Panel entry text area ────────────────────────────────────────────────── */
+.entryText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Description text */
+.entryDesc {
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #fff;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+.entryActive .entryDesc {
+  color: #262626;
+}
+
+/* Force silhouette SVGs to solid black when entry is active (white bg).
+   Fixes martin.svg's white masked path which renders as a halo on white. */
+.entryActive .iconImg {
+  filter: brightness(0);
+}
+
+/* ── Nav buttons ──────────────────────────────────────────────────────────── */
+.navWrap {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  z-index: 20;
+}

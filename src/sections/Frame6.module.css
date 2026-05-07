@@ -1,0 +1,129 @@
+/* ── Scene — full-viewport section; document scroll stays locked throughout ── */
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background-color: #087BFF;  /* GSAP animates → #262626 */
+  overflow: hidden;
+}
+
+/* ── Cloud wrapper — horizontally centred to match Figma (1440px canvas) ────── */
+/* Figma x=177 on 1440px = left: calc(50% − 543px).  GSAP translates y.        */
+.cloudWrap {
+  position: absolute;
+  left: calc(50% - 543px);
+  top: 426px;           /* GSAP translates by −774 px → Frame 15 y = −348     */
+  width: 1085.4px;
+  height: 603px;
+  overflow: visible;
+  isolation: isolate;
+}
+
+/* ── Cloud photo ─────────────────────────────────────────────────────────────── */
+.cloudImg {
+  position: absolute;
+  left: -2.88%;
+  right: -3.01%;
+  top: -109.25px;
+  aspect-ratio: 2067 / 1384;
+  width: calc(100% + 2.88% + 3.01%);
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  display: block;
+}
+
+/* ── Cloud colour overlay — mix-blend-mode:color tints the cloud photo ─────── */
+.cloudOverlay {
+  position: absolute;
+  left: -2.88%;
+  right: -3.01%;
+  top: -109.25px;
+  aspect-ratio: 2067 / 1384;
+  width: calc(100% + 2.88% + 3.01%);
+  background-color: #087BFF;  /* GSAP animates → #262626                        */
+  mix-blend-mode: color;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  pointer-events: none;
+}
+
+/* ── Text container — centred horizontally, positioned per Figma ────────────── */
+/* Figma x=320 on 1440px = left: calc(50% − 400px).                            */
+/* GSAP sets transform: translateY(151px) on mount so title starts at centre.  */
+.textContainer {
+  position: absolute;
+  left: calc(50% - 400px);
+  top: 233.5px;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Title ──────────────────────────────────────────────────────────────────── */
+.title {
+  margin: 0;
+  width: 100%;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 61px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.1;
+  color: #fff;
+  text-align: center;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+/* ── Body paragraph ─────────────────────────────────────────────────────────── */
+.para {
+  margin: 0;
+  width: 100%;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  color: #fff;
+  text-align: center;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+/* ── Rain group — both rain instances fade in together ──────────────────────── */
+.rainGroup {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ── Rain wrapper — each instance, absolutely positioned ────────────────────── */
+/* left is set inline via calc(50% ± offset) for responsive centering.         */
+.rainWrap {
+  position: absolute;
+  width: 737px;
+  height: 661px;
+  overflow: hidden;
+}
+
+/* ── Rain SVG ────────────────────────────────────────────────────────────────── */
+.rainImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* No nav button in this section — scroll up/down navigates to adjacent frames */

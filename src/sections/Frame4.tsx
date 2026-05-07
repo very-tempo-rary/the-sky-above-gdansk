@@ -121,7 +121,7 @@ const INITIATIVES: Initiative[] = [
     paragraphs: [
       'A swift can eat 20,000 insects in 24 hours.',
       <>The <em>Swifts against mosquitoes</em> project – placing 5 nest boxes for swifts on residential buildings – won the 2026 Green Civic Budget vote in the Letnica district. The goal: to both protect birds, and limit the number of mosquitoes in the area.</>,
-      "This is far from the first 'pro-swift' initiative in Gdańsk, with the city having given out 350 boxes for people to install in 2010-13.",
+      "This is far from the first ‘pro-swift’ initiative in Gdańsk, with the city having given out 350 boxes for people to install in 2010–13.",
     ],
   },
   {
@@ -181,7 +181,7 @@ const INITIATIVES: Initiative[] = [
     districtLabelX: '35.01%',
     districtLabelY: 'calc(49.84% - 24px)',
     paragraphs: [
-      "Green Civic Budget 2024 winner, this project involved placing 50 nest boxes in one of Suchanino district's leafy green corridors.",
+      "Green Civic Budget 2024 winner, this project involved placing 50 nest boxes in one of Suchanino district’s leafy green corridors.",
       'The set included models for larger birds, like owls – or jackdaws, who have been spotted pecking out nesting holes in the walls of nearby apartment blocks.',
       'As of 2022, there were 2,200 nest boxes for various birds and squirrels all around Gdańsk.',
     ],
@@ -192,7 +192,7 @@ const INITIATIVES: Initiative[] = [
     nameIsItalic: true,
     polishName: 'Falco gedanense',
     species: 'Common Kestrel',
-    where: "St. John's Church / Main City",
+    where: "St. John’s Church / Main City",
     photo: photoFalco,
     silhouette: silKestrel,
     tilePng: tileKestrel,
@@ -203,9 +203,9 @@ const INITIATIVES: Initiative[] = [
     districtLabelX: '44.19%',
     districtLabelY: 'calc(48.35% - 24px)',
     paragraphs: [
-      <><em>Falco gedanense</em> is an invented Latin name for the kestrel, meaning 'the Gdańsk falcon'. These miniature raptors seem drawn to the city's many gothic churches.</>,
-      "The project consists of a range of initiatives sparked in 2014 by just one passionate activist: Justyna Manuszewska. They include installing nest boxes, population monitoring, banding, educational events, and even workshops like painting the boxes in folk patterns. It's Tricity's only biodiversity compensation program for birds of prey in the urban environment.",
-      "St. John's Church is one of the kestrels' nesting locations, and the cultural center it houses organized a talk about them last year. As of 2022, there were 38 nest boxes for the birds in Gdańsk. One of them was placed on the iconic M3 shipyard crane.",
+      <><em>Falco gedanense</em> is an invented Latin name for the kestrel, meaning &lsquo;the Gdańsk falcon&rsquo;. These miniature raptors seem drawn to the city&rsquo;s many gothic churches.</>,
+      "The project consists of a range of initiatives sparked in 2014 by just one passionate activist: Justyna Manuszewska. They include installing nest boxes, population monitoring, banding, educational events, and even workshops like painting the boxes in folk patterns. It’s Tricity’s only biodiversity compensation program for birds of prey in the urban environment.",
+      "St. John’s Church is one of the kestrels’ nesting locations, and the cultural center it houses organized a talk about them last year. As of 2022, there were 38 nest boxes for the birds in Gdańsk. One of them was placed on the iconic M3 shipyard crane.",
     ],
   },
   {
@@ -224,9 +224,9 @@ const INITIATIVES: Initiative[] = [
     districtLabelX: '51.37%',
     districtLabelY: 'calc(19.26% - 24px)',
     paragraphs: [
-      "Bird Island is a 2 km² artificial nesting site on a breakwater 2 km offshore, designed to mimic natural conditions for common and sandwich terns. It hosts Poland's only sandwich tern colony, with 846 pairs recorded in 2025.",
+      "Bird Island is a 2 km² artificial nesting site on a breakwater 2 km offshore, designed to mimic natural conditions for common and sandwich terns. It hosts Poland’s only sandwich tern colony, with 846 pairs recorded in 2025.",
       'The birds were relocated from the deteriorating Ore Pier in the North Port. To encourage the move, access to the pier was discouraged, while the new site used decoys, recorded calls, and nesting materials to attract them. The colony relocated within about a month.',
-      "Unlike the pier, the island is protected from land predators and storms. In 2025, around 1,000 sandwich tern fledglings were raised there, marking one of the species' most successful breeding seasons in Poland.",
+      "Unlike the pier, the island is protected from land predators and storms. In 2025, around 1,000 sandwich tern fledglings were raised there, marking one of the species’ most successful breeding seasons in Poland.",
     ],
   },
   {
@@ -245,7 +245,7 @@ const INITIATIVES: Initiative[] = [
     districtLabelX: '83.23%',
     districtLabelY: 'calc(43.64% - 24px)',
     paragraphs: [
-      "The Vistula river mouth is one of Poland's most fascinating areas in terms of ornithology – with both a huge wealth of species (even 275), and very large seasonal concentrations of birds like gulls, ducks and waders. The winter gatherings of seagulls and ducks can reach over 100,000 birds.",
+      "The Vistula river mouth is one of Poland’s most fascinating areas in terms of ornithology – with both a huge wealth of species (even 275), and very large seasonal concentrations of birds like gulls, ducks and waders. The winter gatherings of seagulls and ducks can reach over 100,000 birds.",
       'The Reserve is easily reachable by bus, but it only permits entrance on one path. The biggest threat to bird breeding here are tourists.',
     ],
   },
@@ -280,26 +280,22 @@ export default function Frame4() {
   function handleRestart() { restartExperience() }
 
   function handleBack() {
-    unlockScroll()
-    const frame3 = document.getElementById('frame3')
-    if (frame3) {
-      const y = frame3.getBoundingClientRect().top + window.scrollY
-      window.scrollTo({ top: y, behavior: 'instant' })
+    // Go back to Frame7 (building infographic)
+    window.dispatchEvent(new Event('frame7:show'))
+    const frame7 = document.getElementById('frame7')
+    if (frame7) {
+      window.scrollTo({ top: frame7.offsetTop, behavior: 'instant' })
     }
-    lockScroll()
-    // Float the tile grid in from slightly above
-    const scene = document.getElementById('frame3-scene')
-    if (scene) {
-      gsap.fromTo(
-        scene,
-        { opacity: 0, y: -56 },
-        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity' },
-      )
-    }
+    // No opacity: body bg is #087BFF — keeping Frame7 fully opaque avoids a blue flash
+    gsap.fromTo(
+      '#frame7',
+      { y: -56 },
+      { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
+    )
   }
 
   function handleContinue() {
-    // Frame5 doesn't exist yet — button does nothing
+    // placeholder — next frame not yet implemented
   }
 
   return (

@@ -257,7 +257,7 @@ export default function Frame2() {
             and the rest prefer open fields and urban areas.
           </p>
           <p className={styles.paragraphGroupItem} ref={para3Ref}>
-            This last group is the one we'll be taking a closer look at.
+            This last group is the one we&rsquo;ll be taking a closer look at.
           </p>
         </div>
 
@@ -268,8 +268,8 @@ export default function Frame2() {
           </h2>
           <p className={styles.zoomBody} ref={zoomBodyRef}>
             There are several species that chose Gdańsk precisely{' '}
-            <em>for</em> the city's unique conditions, not in spite of them.
-            <br />Let's have a closer look.
+            <em>for</em> the city&rsquo;s unique conditions, not in spite of them.
+            <br />Let&rsquo;s have a closer look.
           </p>
         </div>
 

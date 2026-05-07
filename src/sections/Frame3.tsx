@@ -100,77 +100,77 @@ const SPECIES: Species[] = [
     id: 'tern', name: 'Sandwich tern', polishName: 'Rybitwa czubata',
     description: 'Gdańsk is home to the only sandwich tern colony in Poland. The population lives on the artificial Bird Island, built for it in 2022. Terns nest on the ground, in beach sand, and they feed by plunge-diving in the sea for fish. Males offer fish to females as part of their courtship display.',
     population: '~800 pairs', trend: 'Strong decline', zone: 'Water',
-    habitat: '',
+    habitat: 'Waterfront / Port',
     silhouette: sil01, tilePng: tileTern, photo: photoTern,
   },
   {
     id: 'swan', name: 'Mute swan', polishName: 'Łabędź niemy',
     description: 'Gdańsk is home to about 30–40 breeding pairs of mute swans: the largest urban breeding population in Poland. The Motława river and Radunia Canal network function as a fragmented wetland system.',
     population: '~7K pairs', trend: 'Moderate growth', zone: 'Water',
-    habitat: '',
+    habitat: 'Waterfront / park ponds / canals',
     silhouette: sil04, tilePng: tileSwan, photo: photoSwan,
   },
   {
     id: 'swift', name: 'Common swift', polishName: 'Jerzyk zwyczajny',
     description: 'Never lands except to nest. A swift can fly two million miles in its lifetime – equal to more than four trips to the Moon and back. Transferred from rock crevices to old building gaps, and now depend on which buildings remain habitable after renovations.',
     population: '64–187K pairs', trend: 'Moderate growth', zone: 'Sky',
-    habitat: '',
+    habitat: 'Building gaps and crevices',
     silhouette: sil02, tilePng: tileSwift, photo: photoSwift,
   },
   {
     id: 'redstart', name: 'Black redstart', polishName: 'Kopciuszek zwyczajny',
     description: 'Inhabits stony ground on cliff and mountains, but has expanded to include similar urban habitats, including areas bombed during World War II. Today, its rattling song can be heard even in city centers and industrial spaces, also at night by artificial lighting.',
     population: '~1M pairs', trend: 'Moderate growth', zone: 'Industrial margins',
-    habitat: '',
+    habitat: 'Shipyard / Housing estates',
     silhouette: sil07, tilePng: tileRedstart, photo: photoRedstart,
   },
   {
     id: 'jackdaw', name: 'Jackdaw', polishName: 'Kawka zwyczajna',
     description: 'Extremely sociable, they live in large bands, with every bird having its own unique contact call. They nest in hollows of larger trees and rock crevices, but – like redstarts – have expanded to post-World War II rubble, as well as chimneys and church spires.',
     population: '286–352K pairs', trend: 'Moderate growth', zone: 'Human settlement',
-    habitat: '',
+    habitat: 'Old Town churches / Chimneys',
     silhouette: sil03, tilePng: tileJackdaw, photo: photoJackdaw,
   },
   {
     id: 'rook', name: 'Rook', polishName: 'Gawron',
     description: 'Most vulnerable species featured, declining by almost half in 2012–25 in the Pomerania region. The birds build rookeries of 50–500 nests in city-center avenues; they can return to the same trees for decades. Unfortunately, noise and mess complaints often put rooks in conflict with urban management.',
     population: '183–222K pairs', trend: 'Moderate decline', zone: 'Green corridors',
-    habitat: '',
+    habitat: 'Street trees / Parks',
     silhouette: sil10, tilePng: tileRook, photo: photoRook,
   },
   {
     id: 'kestrel', name: 'Common kestrel', polishName: 'Pustułka zwyczajna',
-    description: 'Uses tall buildings as elevated platforms to characteristically hover-hunt over open ground. About 100 kestrels are born every year in Gdańsk; sadly, only 40–50% of this species\' young survive into adulthood.',
+    description: 'Uses tall buildings as elevated platforms to characteristically hover-hunt over open ground. About 100 kestrels are born every year in Gdańsk; sadly, only 40–50% of this species’ young survive into adulthood.',
     population: '3–5K pairs', trend: 'Moderate growth', zone: 'Sky',
-    habitat: '',
+    habitat: 'Old Town churches',
     silhouette: sil06, tilePng: tileKestrel, photo: photoKestrel,
   },
   {
     id: 'falcon', name: 'Peregrine falcon', polishName: 'Sokół wędrowny',
     description: 'Treats tall buildings and industrial chimneys as sea cliffs. The species is still being reintroduced in Poland, and remains extremely rare. Two nest boxes in Tricity (the adjoining cities of Gdańsk, Sopot and Gdynia) were inhabited in 2015–22; one remains occupied today.',
     population: '~55 pairs', trend: 'None', zone: 'Sky',
-    habitat: '',
+    habitat: 'Tallest buildings and chimneys',
     silhouette: sil05, tilePng: tileFalcon, photo: photoFalcon,
   },
   {
     id: 'pigeon', name: 'Wood pigeon', polishName: 'Gołąb grzywacz',
     description: 'One of the most widespread urban birds in Poland. A forest species that has quietly colonised city parks and street trees without anyone designing for it. It asks only for a horizontal branch.',
     population: '~1M pairs', trend: 'Moderate growth', zone: 'Green corridors',
-    habitat: '',
+    habitat: 'Street Trees / Parks',
     silhouette: sil09, tilePng: tilePigeon, photo: photoPigeon,
   },
   {
     id: 'sparrow', name: 'House sparrow', polishName: 'Wróbel zwyczajny',
     description: 'Always closely tied to our settlements, sparrows now suffer as modern buildings lack nesting spaces, dense shrubs disappear, and threats from cats and winter cold persist. These scrubby birds have limited flight range, and can sometimes move in with larger birds – even predatory ones.',
     population: '6–7M pairs', trend: 'Moderate decline', zone: 'Human settlement',
-    habitat: '',
+    habitat: 'Entire city',
     silhouette: sil08, tilePng: tileSparrow, photo: photoSparrow,
   },
   {
     id: 'martin', name: 'House martin', polishName: 'Jaskółka oknówka',
     description: 'Smaller, plumper, and with a more distinctly forked tail than the swift, the house martin is a type of swallow. Its nest: a cup of mud pellets pressed against a vertical wall directly under the eaves, with only a small opening at the top. Pairs build the nests together, and can reuse them for years.',
     population: '419–596K pairs', trend: 'Stable', zone: 'Sky',
-    habitat: '',
+    habitat: 'Eaves / Facades',
     silhouette: sil11, tilePng: tileMartin, photo: photoMartin,
   },
 ]
@@ -295,6 +295,9 @@ export default function Frame3() {
           suppressLockRef.current = false
           return
         }
+        // If a later frame is being restored after a page refresh, don't snap back here
+        const activeFrame = sessionStorage.getItem('activeFrame')
+        if (activeFrame && activeFrame !== 'frame3') return
         const wrapperY = wrapper.getBoundingClientRect().top + window.scrollY
         window.scrollTo({ top: wrapperY, behavior: 'instant' })
         lockScroll()
@@ -310,8 +313,27 @@ export default function Frame3() {
 
   // ── Navigation handlers ──────────────────────────────────────────────────────
   function handleRestart() {
-    tlRef.current?.pause()
     resetToHidden()
+
+    if (tlRef.current) {
+      // Kill the completed ScrollTrigger so GSAP loses its "already entered"
+      // state. Without this, the trigger won't fire onEnter → restart when the
+      // user scrolls back to Frame3 after jumping to the top.
+      tlRef.current.scrollTrigger?.kill()
+      // Seek to time=0 (paused) so the timeline is clean for the next replay.
+      tlRef.current.pause(0)
+      // Reattach a fresh ScrollTrigger to the same timeline so it will restart
+      // the fly-in animation the next time Frame3 enters the viewport.
+      if (wrapperRef.current) {
+        ScrollTrigger.create({
+          trigger: wrapperRef.current,
+          start: 'top top',
+          toggleActions: 'restart none none none',
+          animation: tlRef.current,
+        })
+      }
+    }
+
     restartExperience()
   }
 
@@ -349,14 +371,15 @@ export default function Frame3() {
     // Suppress the spurious lockTrigger onEnter that GSAP fires when it
     // recalibrates its internal scroll position after unlockScroll().
     suppressLockRef.current = true
+    sessionStorage.setItem('activeFrame', 'frame5')
     unlockScroll()
-    const frame4 = document.getElementById('frame4')
-    if (frame4) {
-      const y = frame4.getBoundingClientRect().top + window.scrollY
+    const frame5 = document.getElementById('frame5')
+    if (frame5) {
+      const y = frame5.getBoundingClientRect().top + window.scrollY
       window.scrollTo({ top: y, behavior: 'instant' })
-      // Animate Frame4 floating in from below
+      // Animate Frame5 floating in from below
       gsap.fromTo(
-        frame4,
+        frame5,
         { opacity: 0, y: 56 },
         { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity' },
       )

@@ -21,5 +21,6 @@ html::-webkit-scrollbar {
 
 body {
   overflow-x: hidden;
-  background-color: #087BFF; /* prevents white flash / margins when sections don't cover the full page */
+  /* #262626 prevents the blue body showing through Frame7's y-translated entrance */
+  background-color: #262626;
 }
