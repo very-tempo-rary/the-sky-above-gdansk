@@ -8,6 +8,8 @@ import { unlockScroll } from './scrollLock'
  */
 export function restartExperience(): void {
   unlockScroll()
+  // Clear any frame-restoration key so scroll-lock triggers re-engage on replay
+  sessionStorage.removeItem('activeFrame')
   // Kill any in-progress GSAP scroll tween (e.g. arrow click still animating)
   gsap.killTweensOf(window)
 
