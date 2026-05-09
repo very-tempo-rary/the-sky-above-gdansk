@@ -131,11 +131,11 @@ export default function Frame7() {
   }, [])
 
   // ── Navigation helpers ────────────────────────────────────────────────────
-  function goToFrame4() {
-    const frame4 = document.getElementById('frame4')
-    if (frame4) {
-      window.scrollTo({ top: frame4.offsetTop, behavior: 'instant' })
-      gsap.fromTo('#frame4',
+  function goToFrame21() {
+    const frame21 = document.getElementById('frame21')
+    if (frame21) {
+      window.scrollTo({ top: frame21.offsetTop, behavior: 'instant' })
+      gsap.fromTo('#frame21',
         { opacity: 0, y: 56 },
         { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity' },
       )
@@ -161,7 +161,7 @@ export default function Frame7() {
 
   function handleContinue() {
     navigating.current = true
-    goToFrame4()
+    goToFrame21()
   }
 
   function handleRestart() { restartExperience() }

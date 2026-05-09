@@ -280,18 +280,16 @@ export default function Frame4() {
   function handleRestart() { restartExperience() }
 
   function handleBack() {
-    // Go back to Frame7 (building infographic)
-    window.dispatchEvent(new Event('frame7:show'))
-    const frame7 = document.getElementById('frame7')
-    if (frame7) {
-      window.scrollTo({ top: frame7.offsetTop, behavior: 'instant' })
+    // Go back to Frame21 (transition screen)
+    const frame21 = document.getElementById('frame21')
+    if (frame21) {
+      window.scrollTo({ top: frame21.offsetTop, behavior: 'instant' })
+      gsap.fromTo(
+        '#frame21',
+        { y: -56 },
+        { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
+      )
     }
-    // No opacity: body bg is #087BFF — keeping Frame7 fully opaque avoids a blue flash
-    gsap.fromTo(
-      '#frame7',
-      { y: -56 },
-      { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
-    )
   }
 
   function handleContinue() {

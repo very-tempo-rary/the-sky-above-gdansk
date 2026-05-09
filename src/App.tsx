@@ -5,6 +5,7 @@ import Frame3 from './sections/Frame3'
 import Frame5 from './sections/Frame5'
 import Frame6 from './sections/Frame6'
 import Frame7 from './sections/Frame7'
+import Frame21 from './sections/Frame21'
 import Frame4 from './sections/Frame4'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
       <Frame5 />
       <Frame6 />
       <Frame7 />
+      <Frame21 />
       <Frame4 />
     </>
   )
