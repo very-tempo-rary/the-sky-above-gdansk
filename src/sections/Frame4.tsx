@@ -2,7 +2,6 @@ import { useState, useRef, useLayoutEffect } from 'react'
 import gsap from 'gsap'
 import styles from './Frame4.module.css'
 import NavButton from '../components/NavButton'
-import { lockScroll, unlockScroll } from '../utils/scrollLock'
 import { restartExperience } from '../utils/restartExperience'
 
 // ── Map SVG (inline via ?react so we can highlight district paths with CSS) ───

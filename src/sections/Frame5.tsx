@@ -321,7 +321,7 @@ export default function Frame5() {
 
           {/* Right column — nesting sites */}
           <div className={styles.colRight}>
-            {SITES.map((site, si) => {
+            {SITES.map((site, _si) => {
               const connectedBirdId = [...connections.entries()].find(([, s]) => s === site.id)?.[0] ?? null
               const isMatched = connectedBirdId !== null
               const isDimmed  = hoveredPair !== null && hoveredPair !== connectedBirdId
