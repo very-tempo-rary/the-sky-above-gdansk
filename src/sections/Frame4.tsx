@@ -280,6 +280,7 @@ export default function Frame4() {
 
   function handleBack() {
     // Go back to Frame21 (transition screen)
+    window.dispatchEvent(new Event('frame21:show'))
     const frame21 = document.getElementById('frame21')
     if (frame21) {
       window.scrollTo({ top: frame21.offsetTop, behavior: 'instant' })

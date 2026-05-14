@@ -24,18 +24,17 @@ export default function Frame6() {
   const rainRef          = useRef<HTMLDivElement>(null)
   const para2Ref         = useRef<HTMLDivElement>(null)
 
-  const tlRef      = useRef<gsap.core.Timeline | null>(null)
-  const targetRef  = useRef(0)   // target progress 0–1 (driven by wheel)
-  const currentRef = useRef(0)   // smoothed progress (drives timeline)
-  const navigating = useRef(false)
+  const tlRef        = useRef<gsap.core.Timeline | null>(null)
+  const targetRef    = useRef(0)   // target progress 0–1 (driven by wheel)
+  const currentRef   = useRef(0)   // smoothed progress (drives timeline)
+  const overshootRef = useRef(0)   // accumulated px scrolled past progress=1
+  const navigating   = useRef(false)
 
   // ── Apply initial GSAP states ─────────────────────────────────────────────
   function applyInitialState() {
     gsap.set(textContainerRef.current, { y: TEXT_DY })
-    gsap.set(
-      [para1Ref.current, rainRef.current, para2Ref.current],
-      { opacity: 0, y: 30 },
-    )
+    gsap.set([para1Ref.current, para2Ref.current], { opacity: 0, y: 30 })
+    gsap.set(rainRef.current, { opacity: 0, y: -30 })
   }
 
   // ── Navigation helpers ────────────────────────────────────────────────────
@@ -51,19 +50,16 @@ export default function Frame6() {
   }
 
   function goToFrame7() {
-    // Snap timeline to end so Frame6 background is fully #262626 before Frame7 appears
     targetRef.current  = 1
     currentRef.current = 1
     tlRef.current?.progress(1)
-
     window.dispatchEvent(new Event('frame7:show'))
     const frame7 = document.getElementById('frame7')
     if (frame7) {
       window.scrollTo({ top: frame7.offsetTop, behavior: 'instant' })
-      // No opacity: body bg is #087BFF — keeping Frame7 fully opaque avoids a blue flash
       gsap.fromTo('#frame7',
-        { y: 56 },
-        { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
+        { opacity: 0, y: 56 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity' },
       )
     }
   }
@@ -74,13 +70,25 @@ export default function Frame6() {
     // ── Paused timeline — progress driven by wheel, not ScrollTrigger ─────────
     const tl = gsap.timeline({ paused: true })
 
-    tl.to(sceneRef.current,          { backgroundColor: '#262626', ease: 'none', duration: 2 }, 0)
-    tl.to(cloudOverlayRef.current,   { backgroundColor: '#262626', ease: 'none', duration: 2 }, 0)
-    tl.to(cloudRef.current,          { y: CLOUD_DY, ease: 'none', duration: 4 }, 0)
-    tl.to(textContainerRef.current,  { y: 0, ease: 'power2.out', duration: 0.8 }, 0.5)
-    tl.to(para1Ref.current,          { opacity: 1, y: 0, ease: 'power2.out', duration: 0.6 }, 0.7)
-    tl.to(rainRef.current,           { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, 1.5)
-    tl.to(para2Ref.current,          { opacity: 1, y: 0, ease: 'power2.out', duration: 0.5 }, 2.0)
+    // totalPx = 7× viewport so the cloud rises slowly across a long scroll distance.
+    //
+    //  t=0→2   background fades to #262626
+    //  t=0→7   cloud rises to final position (sine.inOut — gentle S-curve, never feels rushed)
+    //  t=0.5   text container slides up
+    //  t=0.7   para1 fades in
+    //  t=1.5   rain fades in
+    //  t=2.5   ← cloud/text/rain all settled; long dead zone begins
+    //  t=7.0   para2 fades in  (power2.out — same feel as rest of experience)
+    //  t=7.6   para2 done
+    //  t=9.0   timeline end    (1.4 s rest on full text before overshoot kicks in)
+    tl.to(sceneRef.current,          { backgroundColor: '#262626', ease: 'none', duration: 2   }, 0)
+    tl.to(cloudOverlayRef.current,   { backgroundColor: '#262626', ease: 'none', duration: 2   }, 0)
+    tl.to(cloudRef.current,          { y: CLOUD_DY,                ease: 'sine.inOut', duration: 7   }, 0)
+    tl.to(textContainerRef.current,  { y: 0,    ease: 'power1.out', duration: 1.2 }, 0.5)
+    tl.to(para1Ref.current,          { opacity: 1, y: 0, ease: 'power1.out', duration: 1.1 }, 0.7)
+    tl.to(rainRef.current,           { opacity: 1, y: 0, ease: 'power1.out', duration: 1.1 }, 8.5)
+    tl.to(para2Ref.current,          { opacity: 1, y: 0, ease: 'power1.out', duration: 1.1 }, 10.4)
+    tl.to({},                        { duration: 4.5 }, 11.5) // extends timeline to t=16.0
 
     tlRef.current = tl
 
@@ -96,7 +104,7 @@ export default function Frame6() {
     // ── Wheel handler ─────────────────────────────────────────────────────────
     // Scroll up past 0% → Frame5 (matching game)
     // Scroll down past 100% → Frame7 (building infographic)
-    const totalPx = window.innerHeight * 3
+    const totalPx = window.innerHeight * 11
 
     function onWheel(e: WheelEvent) {
       e.preventDefault()
@@ -115,11 +123,18 @@ export default function Frame6() {
         return
       }
 
-      if (next > 1.05 && currentRef.current >= 0.95) {
-        // Overshoot past end → forward to building infographic
-        navigating.current = true
-        goToFrame7()
-        return
+      if (currentRef.current >= 0.95 && delta > 0) {
+        // Accumulate extra scroll past the end; require half a viewport height
+        // of continued scrolling before advancing — gives a natural pause.
+        overshootRef.current += delta
+        if (overshootRef.current > window.innerHeight * 0.8) {
+          navigating.current = true
+          goToFrame7()
+          return
+        }
+      } else {
+        // Reset accumulator if user scrolls back
+        overshootRef.current = 0
       }
 
       targetRef.current = Math.min(1, Math.max(0, next))
@@ -178,8 +193,7 @@ export default function Frame6() {
         </div>
 
         <div ref={para2Ref} className={styles.para}>
-          But it has also unintentionally harmed our feathery co-tenants, most
-          notably swifts and sparrows.
+          But it has also unintentionally harmed our feathery<br />co-tenants.
         </div>
       </div>
 

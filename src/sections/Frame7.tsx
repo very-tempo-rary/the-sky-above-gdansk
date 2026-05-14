@@ -132,6 +132,7 @@ export default function Frame7() {
 
   // ── Navigation helpers ────────────────────────────────────────────────────
   function goToFrame21() {
+    window.dispatchEvent(new Event('frame21:show'))
     const frame21 = document.getElementById('frame21')
     if (frame21) {
       window.scrollTo({ top: frame21.offsetTop, behavior: 'instant' })

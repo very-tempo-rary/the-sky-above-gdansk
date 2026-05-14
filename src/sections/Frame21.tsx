@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import styles from './Frame21.module.css'
 import NavButton from '../components/NavButton'
@@ -9,7 +9,34 @@ import cloud2 from '@assets/images/clouds/3-black.png'
 import cloud3 from '@assets/images/clouds/5-black.png'
 
 export default function Frame21() {
+  const sceneRef   = useRef<HTMLElement>(null)
   const navigating = useRef(false)
+
+  // ── Reset navigating when returning to this screen ───────────────────────
+  useEffect(() => {
+    function onShow() { navigating.current = false }
+    window.addEventListener('frame21:show', onShow)
+    return () => window.removeEventListener('frame21:show', onShow)
+  }, [])
+
+  // ── Wheel: prevent free scrolling; scroll up → Frame7, down → Frame4 ─────
+  useEffect(() => {
+    function onWheel(e: WheelEvent) {
+      e.preventDefault()
+      if (navigating.current) return
+
+      if (e.deltaY < 0) {
+        navigating.current = true
+        goToFrame7()
+      } else if (e.deltaY > 0) {
+        navigating.current = true
+        goToFrame4()
+      }
+    }
+    const scene = sceneRef.current
+    scene?.addEventListener('wheel', onWheel, { passive: false })
+    return () => scene?.removeEventListener('wheel', onWheel)
+  }, [])
 
   function goToFrame7() {
     window.dispatchEvent(new Event('frame7:show'))
@@ -49,31 +76,16 @@ export default function Frame21() {
   function handleRestart() { restartExperience() }
 
   return (
-    <section id="frame21" className={styles.scene}>
+    <section id="frame21" ref={sceneRef} className={styles.scene}>
 
       {/* ── Cloud 1 — top-left, bleeds off left + top ───────────────────── */}
-      <img
-        src={cloud1}
-        alt=""
-        className={styles.cloud1}
-        draggable={false}
-      />
+      <img src={cloud1} alt="" className={styles.cloud1} draggable={false} />
 
       {/* ── Cloud 2 — right side, bleeds off right + top + bottom ───────── */}
-      <img
-        src={cloud2}
-        alt=""
-        className={styles.cloud2}
-        draggable={false}
-      />
+      <img src={cloud2} alt="" className={styles.cloud2} draggable={false} />
 
       {/* ── Cloud 3 — upper-right, bleeds off top + right ───────────────── */}
-      <img
-        src={cloud3}
-        alt=""
-        className={styles.cloud3}
-        draggable={false}
-      />
+      <img src={cloud3} alt="" className={styles.cloud3} draggable={false} />
 
       {/* ── Text ────────────────────────────────────────────────────────── */}
       <p className={styles.text}>Fortunately, things are starting to look up.</p>
