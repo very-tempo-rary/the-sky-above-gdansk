@@ -43,7 +43,7 @@ export default function Frame1() {
     const cursor  = cursorRef.current
     if (!section || !cursor) return
 
-    gsap.set(cursor, { xPercent: -50, yPercent: -50, opacity: 0 })
+    gsap.set(cursor, { x: window.innerWidth / 2, y: window.innerHeight / 2, xPercent: -50, yPercent: -50, opacity: 0 })
 
     // Register a zero-duration hide so BirdsLayer can kill this cursor
     // at the exact frame flyIn() fires, with no async callback lag.

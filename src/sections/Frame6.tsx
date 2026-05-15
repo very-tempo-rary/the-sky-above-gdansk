@@ -39,6 +39,7 @@ export default function Frame6() {
 
   // ── Navigation helpers ────────────────────────────────────────────────────
   function goToFrame5() {
+    window.dispatchEvent(new Event('frame5:reset'))
     const frame5 = document.getElementById('frame5')
     if (frame5) {
       window.scrollTo({ top: frame5.offsetTop, behavior: 'instant' })
@@ -86,9 +87,9 @@ export default function Frame6() {
     tl.to(cloudRef.current,          { y: CLOUD_DY,                ease: 'sine.inOut', duration: 7   }, 0)
     tl.to(textContainerRef.current,  { y: 0,    ease: 'power1.out', duration: 1.2 }, 0.5)
     tl.to(para1Ref.current,          { opacity: 1, y: 0, ease: 'power1.out', duration: 1.1 }, 0.7)
-    tl.to(rainRef.current,           { opacity: 1, y: 0, ease: 'power1.out', duration: 1.1 }, 8.5)
+    tl.to(rainRef.current,           { opacity: 1, y: 0, ease: 'sine.out',   duration: 2.5 }, 8.5)
     tl.to(para2Ref.current,          { opacity: 1, y: 0, ease: 'power1.out', duration: 1.1 }, 10.4)
-    tl.to({},                        { duration: 4.5 }, 11.5) // extends timeline to t=16.0
+    tl.to({},                        { duration: 2.0 }, 11.5) // extends timeline to t=13.5
 
     tlRef.current = tl
 
@@ -116,25 +117,28 @@ export default function Frame6() {
 
       const next = targetRef.current + delta / totalPx
 
-      if (next < -0.05 && currentRef.current <= 0.05) {
-        // Overshoot past start → back to matching game
-        navigating.current = true
-        goToFrame5()
-        return
+      // Scroll UP at the start — accumulate negative overshoot
+      if (currentRef.current <= 0.05 && delta < 0) {
+        overshootRef.current += delta
+        if (overshootRef.current < -(window.innerHeight * 0.3)) {
+          navigating.current = true
+          goToFrame5()
+          return
+        }
+      } else if (delta > 0) {
+        overshootRef.current = Math.max(0, overshootRef.current)
       }
 
+      // Scroll DOWN past the end — accumulate positive overshoot
       if (currentRef.current >= 0.95 && delta > 0) {
-        // Accumulate extra scroll past the end; require half a viewport height
-        // of continued scrolling before advancing — gives a natural pause.
         overshootRef.current += delta
         if (overshootRef.current > window.innerHeight * 0.8) {
           navigating.current = true
           goToFrame7()
           return
         }
-      } else {
-        // Reset accumulator if user scrolls back
-        overshootRef.current = 0
+      } else if (delta < 0) {
+        overshootRef.current = Math.min(0, overshootRef.current)
       }
 
       targetRef.current = Math.min(1, Math.max(0, next))

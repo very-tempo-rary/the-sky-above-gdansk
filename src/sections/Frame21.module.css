@@ -4,15 +4,15 @@
   width: 100%;
   height: 100vh;
   min-height: 600px;
-  background-color: #111111;
+  background-color: #262626;
   overflow: hidden;
 }
 
 /* ── Clouds ───────────────────────────────────────────────────────────────── */
-/* Coordinates derived from Figma (1440×810 design):
-   cloud1: x=-603 y=-306 w=1205 h=807  → top-left, bleeds off left + top
-   cloud2: x=930  y=-137 w=972  h=1460 → right side, bleeds off right/top/bottom
-   cloud3: x=611  y=-344 w=954  h=630  → upper-right, bleeds off top + right   */
+/* Coordinates from Figma (1440×810):
+   cloud1: x=-603 y=-306 w=1205  → top-left, bleeds off left + top
+   cloud2: x=930  y=-137 w=972   → right side, bleeds off right/top/bottom
+   cloud3: x=611  y=-344 w=954   → upper-right, bleeds off top + right       */
 
 .cloud1 {
   position: absolute;
@@ -44,14 +44,11 @@
   user-select: none;
 }
 
-/* ── Text ─────────────────────────────────────────────────────────────────── */
-/* Figma: x=360 y=396 w=720 h=19 in a 1440×810 frame
-   → horizontally centred (360 + 720/2 = 720 = 50% of 1440)
-   → vertically at 48.9% from top                                              */
-.text {
+/* ── "Fortunately" text ───────────────────────────────────────────────────── */
+.fortunately {
   position: absolute;
   left: 50%;
-  top: 48.889%;    /* 396 / 810 */
+  top: 48.889%;     /* 396 / 810 */
   transform: translateX(-50%);
   margin: 0;
   width: min(720px, 90%);
@@ -65,10 +62,53 @@
   pointer-events: none;
 }
 
-/* ── Nav buttons ──────────────────────────────────────────────────────────── */
-.navWrap {
+/* ── Bird silhouettes (Figma Frame22 positions, 1440×810 canvas) ─────────── */
+/* All birds are 160×160 px in Figma                                           */
+.bird {
   position: absolute;
-  bottom: 40px;
-  right: 40px;
-  z-index: 20;
+  width: 160px;
+  height: 160px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.bird1 { left:  6.736%; top: 19.630%; }   /*  97 / 1440,  159 / 810 */
+.bird2 { left: 13.819%; top: 19.506%; }   /* 199 / 1440,  158 / 810 */
+.bird3 { left: 20.833%; top: 12.593%; }   /* 300 / 1440,  102 / 810 */
+.bird4 { left: 26.042%; top:  8.642%; }   /* 375 / 1440,   70 / 810 */
+
+/* ── "Slowly moving back in" text block ──────────────────────────────────── */
+/* Centred on screen, 720 px wide, 48 px gap between elements (from Figma)    */
+.textContent {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(720px, 90%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+}
+
+.heading {
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 57px;
+  font-weight: 400;
+  line-height: 1.1;
+  white-space: nowrap;
+  font-feature-settings: 'onum' 1;
+}
+
+.para {
+  margin: 0;
+  font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-feature-settings: 'onum' 1;
 }

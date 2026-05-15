@@ -282,8 +282,24 @@ export default function BirdsLayer() {
     // has already fired by this point, so real user-scroll callbacks will work.
     const initRaf = requestAnimationFrame(() => { ignoreInitRef.current = false })
 
+    // ── birds:reset — force all birds off-screen instantly on restart ─────────
+    function onReset() {
+      if (flyOutTimer.current) { clearTimeout(flyOutTimer.current); flyOutTimer.current = null }
+      birds.forEach((el, i) => {
+        swayTweens.current[i]?.kill()
+        swayTweens.current[i] = null
+        gsap.killTweensOf(el)
+        const offset = staticOffsets[i] ?? edgeOffset(BIRDS[i])
+        gsap.set(el, { rotation: BIRDS[i].rot, x: offset.x, y: offset.y, opacity: 0 })
+      })
+      stateRef.current = 'hidden'
+      activeCursorFrom.current = null
+    }
+    window.addEventListener('birds:reset', onReset)
+
     return () => {
       cancelAnimationFrame(initRaf)
+      window.removeEventListener('birds:reset', onReset)
       st.kill()
       birds.forEach((_, i) => { swayTweens.current[i]?.kill() })
       if (flyOutTimer.current) clearTimeout(flyOutTimer.current)

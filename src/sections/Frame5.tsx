@@ -109,6 +109,18 @@ export default function Frame5() {
 
   const allConnected = connections.size === BIRDS.length
 
+  // ── Reset state when arriving from restart or Frame6 back-navigation ─────────
+  useEffect(() => {
+    function onReset() {
+      setConnections(new Map())
+      setDragging(null)
+      setHoveredPair(null)
+      setHoveredHandle(null)
+    }
+    window.addEventListener('frame5:reset', onReset)
+    return () => window.removeEventListener('frame5:reset', onReset)
+  }, [])
+
   // ── Restore after page refresh ────────────────────────────────────────────────
   // If the user refreshed while on Frame5, scroll back here and re-lock.
   // requestAnimationFrame defers until after GSAP + ScrollTrigger have initialised
@@ -148,12 +160,16 @@ export default function Frame5() {
     window.dispatchEvent(new CustomEvent('frame6:goto', { detail: { progress: 0 } }))
     const frame6 = document.getElementById('frame6')
     if (frame6) {
+      document.body.style.backgroundColor = '#087BFF'
       // Document scroll stays locked — window.scrollTo still moves the viewport
       window.scrollTo({ top: frame6.offsetTop, behavior: 'instant' })
       gsap.fromTo(
         '#frame6',
         { opacity: 0, y: 56 },
-        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity' },
+        {
+          opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity',
+          onComplete: () => { document.body.style.backgroundColor = '' },
+        },
       )
     }
   }

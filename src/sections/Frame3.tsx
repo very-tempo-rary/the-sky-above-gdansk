@@ -298,6 +298,11 @@ export default function Frame3() {
         // If a later frame is being restored after a page refresh, don't snap back here
         const activeFrame = sessionStorage.getItem('activeFrame')
         if (activeFrame && activeFrame !== 'frame3') return
+        // Guard against spurious GSAP recalibration fires: only lock if Frame3's
+        // top is genuinely near the viewport top (within half a screen).
+        // This prevents the trigger from locking scroll after restart or any
+        // ScrollTrigger.refresh() call when the page is not actually at Frame3.
+        if (wrapper.getBoundingClientRect().top > window.innerHeight * 0.5) return
         const wrapperY = wrapper.getBoundingClientRect().top + window.scrollY
         window.scrollTo({ top: wrapperY, behavior: 'instant' })
         lockScroll()
@@ -375,17 +380,28 @@ export default function Frame3() {
     unlockScroll()
     const frame5 = document.getElementById('frame5')
     if (frame5) {
+      document.body.style.backgroundColor = '#087BFF'
       const y = frame5.getBoundingClientRect().top + window.scrollY
       window.scrollTo({ top: y, behavior: 'instant' })
       // Animate Frame5 floating in from below
       gsap.fromTo(
         frame5,
         { opacity: 0, y: 56 },
-        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity' },
+        {
+          opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform,opacity',
+          onComplete: () => { document.body.style.backgroundColor = '' },
+        },
       )
     }
     lockScroll()
   }
+
+  // Reset selected tile when the experience restarts
+  useEffect(() => {
+    function onReset() { setSelected('seagull') }
+    window.addEventListener('frame3:reset', onReset)
+    return () => window.removeEventListener('frame3:reset', onReset)
+  }, [])
 
   // Close tooltip whenever the user switches species
   useEffect(() => { setTooltipOpen(false) }, [selected])

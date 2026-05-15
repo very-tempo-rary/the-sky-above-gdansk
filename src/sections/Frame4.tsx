@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect } from 'react'
+import { useState, useRef, useLayoutEffect, useEffect } from 'react'
 import gsap from 'gsap'
 import styles from './Frame4.module.css'
 import NavButton from '../components/NavButton'
@@ -116,7 +116,7 @@ const INITIATIVES: Initiative[] = [
     district: 'Letnica',
     districtPaths: ['path1334'],
     districtLabelX: '42.90%',
-    districtLabelY: 'calc(26.28% - 24px)',
+    districtLabelY: 'calc(34.48% - 39px)',
     paragraphs: [
       'A swift can eat 20,000 insects in 24 hours.',
       <>The <em>Swifts against mosquitoes</em> project – placing 5 nest boxes for swifts on residential buildings – won the 2026 Green Civic Budget vote in the Letnica district. The goal: to both protect birds, and limit the number of mosquitoes in the area.</>,
@@ -136,8 +136,8 @@ const INITIATIVES: Initiative[] = [
     mapY: '19.94%',
     district: 'Oliwa',
     districtPaths: ['path1380'],
-    districtLabelX: '21.97%',
-    districtLabelY: 'calc(15.51% - 24px)',
+    districtLabelX: '22.01%',
+    districtLabelY: 'calc(19.94% - 39px)',
     paragraphs: [
       'The Bird Feeder Action is a country-wide bird banding program the Gdańsk Zoo takes part in. The banding is done every winter – this is when birds are easiest to catch, as they gather more around feeders. One species particularly dependant on feeders is the sparrow: tiny, and prone to cold.',
       'The Zoo sessions are open to the public, which makes them a great opportunity to learn about different bird species, their food, and the crucial role of banding.',
@@ -156,8 +156,8 @@ const INITIATIVES: Initiative[] = [
     mapY: '25.64%',
     district: 'Oliwa',
     districtPaths: ['path1380'],
-    districtLabelX: '21.97%',
-    districtLabelY: 'calc(15.51% - 24px)',
+    districtLabelX: '22.01%',
+    districtLabelY: 'calc(25.64% - 39px)',
     paragraphs: [
       'Falcons are enough of a rarity in Poland to inspire not only coverage in the local media, but even projects that livestream their comings and goings.',
       "The tallest building in Tricity started being visited by a falcon while still under construction. A nest box and a livestreaming camera were placed at the top; unfortunately, so far the birds have not moved in.",
@@ -177,8 +177,8 @@ const INITIATIVES: Initiative[] = [
     mapY: '53.54%',
     district: 'Suchanino',
     districtPaths: ['path10171'],
-    districtLabelX: '35.01%',
-    districtLabelY: 'calc(49.84% - 24px)',
+    districtLabelX: '34.96%',
+    districtLabelY: 'calc(53.54% - 39px)',
     paragraphs: [
       "Green Civic Budget 2024 winner, this project involved placing 50 nest boxes in one of Suchanino district’s leafy green corridors.",
       'The set included models for larger birds, like owls – or jackdaws, who have been spotted pecking out nesting holes in the walls of nearby apartment blocks.',
@@ -199,8 +199,8 @@ const INITIATIVES: Initiative[] = [
     mapY: '51.18%',
     district: 'Śródmieście',
     districtPaths: ['path4962'],
-    districtLabelX: '44.19%',
-    districtLabelY: 'calc(48.35% - 24px)',
+    districtLabelX: '44.15%',
+    districtLabelY: 'calc(51.18% - 39px)',
     paragraphs: [
       <><em>Falco gedanense</em> is an invented Latin name for the kestrel, meaning &lsquo;the Gdańsk falcon&rsquo;. These miniature raptors seem drawn to the city&rsquo;s many gothic churches.</>,
       "The project consists of a range of initiatives sparked in 2014 by just one passionate activist: Justyna Manuszewska. They include installing nest boxes, population monitoring, banding, educational events, and even workshops like painting the boxes in folk patterns. It’s Tricity’s only biodiversity compensation program for birds of prey in the urban environment.",
@@ -220,8 +220,8 @@ const INITIATIVES: Initiative[] = [
     mapY: '31.53%',
     district: 'Stogi',
     districtPaths: ['path2080'],
-    districtLabelX: '51.37%',
-    districtLabelY: 'calc(19.26% - 24px)',
+    districtLabelX: '51.38%',
+    districtLabelY: 'calc(31.53% - 39px)',
     paragraphs: [
       "Bird Island is a 2 km² artificial nesting site on a breakwater 2 km offshore, designed to mimic natural conditions for common and sandwich terns. It hosts Poland’s only sandwich tern colony, with 846 pairs recorded in 2025.",
       'The birds were relocated from the deteriorating Ore Pier in the North Port. To encourage the move, access to the pier was discouraged, while the new site used decoys, recorded calls, and nesting materials to attract them. The colony relocated within about a month.',
@@ -242,7 +242,7 @@ const INITIATIVES: Initiative[] = [
     district: 'Sobieszewo',
     districtPaths: ['path1316'],
     districtLabelX: '83.23%',
-    districtLabelY: 'calc(43.64% - 24px)',
+    districtLabelY: 'calc(55.50% - 39px)',
     paragraphs: [
       "The Vistula river mouth is one of Poland’s most fascinating areas in terms of ornithology – with both a huge wealth of species (even 275), and very large seasonal concentrations of birds like gulls, ducks and waders. The winter gatherings of seagulls and ducks can reach over 100,000 birds.",
       'The Reserve is easily reachable by bus, but it only permits entrance on one path. The biggest threat to bird breeding here are tourists.',
@@ -268,6 +268,13 @@ export default function Frame4() {
     return () => ro.disconnect()
   }, [])
 
+  // ── Reset selected initiative when restarting ────────────────────────────────
+  useEffect(() => {
+    function onReset() { setSelectedId(INITIATIVES[0].id) }
+    window.addEventListener('frame4:reset', onReset)
+    return () => window.removeEventListener('frame4:reset', onReset)
+  }, [])
+
   const selected = INITIATIVES.find(i => i.id === selectedId) ?? INITIATIVES[0]
 
   function handleSelect(id: string) {
@@ -279,15 +286,16 @@ export default function Frame4() {
   function handleRestart() { restartExperience() }
 
   function handleBack() {
-    // Go back to Frame21 (transition screen)
-    window.dispatchEvent(new Event('frame21:show'))
+    // Go back to Frame21 at its end state (blue, full text visible).
+    // Pure opacity fade avoids revealing Frame7's dark background above Frame21.
+    window.dispatchEvent(new CustomEvent('frame21:goto', { detail: { progress: 1 } }))
     const frame21 = document.getElementById('frame21')
     if (frame21) {
       window.scrollTo({ top: frame21.offsetTop, behavior: 'instant' })
       gsap.fromTo(
         '#frame21',
-        { y: -56 },
-        { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: 'power1.out', clearProps: 'opacity' },
       )
     }
   }

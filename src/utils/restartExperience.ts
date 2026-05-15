@@ -35,6 +35,11 @@ export function restartExperience(): void {
     ease: 'power2.in',
     onComplete: () => {
       window.scrollTo({ top: 0, behavior: 'instant' })
+      // Reset any stateful frames back to their initial state
+      // Force Frame4 + Frame5 to fully remount (guaranteed clean state)
+      window.dispatchEvent(new Event('restart:remount'))
+      window.dispatchEvent(new Event('birds:reset'))
+      window.dispatchEvent(new Event('frame3:reset'))
       // Force all ScrollTriggers to recalculate from the new scroll position.
       // Without this, triggers have stale positions from the scroll-lock state
       // (overflow:hidden) and won't fire correctly when scrolling back down.
