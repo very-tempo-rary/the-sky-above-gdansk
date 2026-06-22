@@ -301,7 +301,19 @@ export default function Frame4() {
   }
 
   function handleContinue() {
-    // placeholder — next frame not yet implemented
+    const frame23 = document.getElementById('frame23')
+    if (!frame23) return
+    document.body.style.backgroundColor = '#087BFF'
+    gsap.set('#frame23', { opacity: 0 })
+    window.scrollTo({ top: frame23.offsetTop, behavior: 'instant' })
+    gsap.fromTo('#frame23',
+      { opacity: 0, y: 56 },
+      {
+        opacity: 1, y: 0, duration: 0.55, ease: 'power3.out',
+        clearProps: 'transform,opacity',
+        onComplete: () => { document.body.style.backgroundColor = '' },
+      },
+    )
   }
 
   return (

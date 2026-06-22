@@ -9,9 +9,10 @@ import Frame6 from './sections/Frame6'
 import Frame7 from './sections/Frame7'
 import Frame21 from './sections/Frame21'
 import Frame4 from './sections/Frame4'
+import Frame23 from './sections/Frame23'
 
 export default function App() {
-  // Incrementing this key forces Frame4 and Frame5 to fully remount on restart,
+  // Incrementing this key forces Frame4, Frame5, and Frame23 to fully remount on restart,
   // which is the only reliable way to guarantee their React state is wiped clean.
   const [restartCount, setRestartCount] = useState(0)
 
@@ -26,11 +27,16 @@ export default function App() {
       <Frame1 />
       <Frame2 />
       <Frame3 />
-      <Frame5 key={restartCount} />
+      <Frame5 key={`f5-${restartCount}`} />
       <Frame6 />
       <Frame7 />
       <Frame21 />
-      <Frame4 key={restartCount} />
+      {/* Wrapper lets goToFrame4 animate with y:56 without triggering
+          Frame4's internal overflow:hidden ResizeObserver */}
+      <div id="frame4-wrap">
+        <Frame4 key={`f4-${restartCount}`} />
+      </div>
+      <Frame23 key={`f23-${restartCount}`} />
     </>
   )
 }

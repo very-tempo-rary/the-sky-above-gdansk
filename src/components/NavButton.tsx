@@ -10,6 +10,7 @@ interface NavButtonProps {
   backLabel?:      string
   continueLabel?:  string
   restartLabel?:   string
+  hideContinue?:   boolean
 }
 
 /**
@@ -26,6 +27,7 @@ export default function NavButton({
   backLabel     = 'Back',
   continueLabel = 'Continue',
   restartLabel  = 'Restart',
+  hideContinue  = false,
 }: NavButtonProps) {
   return (
     <div className={styles.wrap}>
@@ -77,27 +79,29 @@ export default function NavButton({
       </button>
 
       {/* Continue — down arrow, downward conveyor */}
-      <button
-        className={`${styles.btn} ${styles.continueBtn}`}
-        onClick={onContinue}
-        aria-label={continueLabel}
-      >
-        <span className={styles.label}>{continueLabel}</span>
-        <span className={styles.arrowWrap}>
-          <ArrowDown
-            className={`${styles.arrowSvg} ${styles.continueArrow}`}
-            aria-hidden="true"
-            width={16}
-            height={16}
-          />
-          <ArrowDown
-            className={`${styles.arrowSvg} ${styles.continueClone}`}
-            aria-hidden="true"
-            width={16}
-            height={16}
-          />
-        </span>
-      </button>
+      {!hideContinue && (
+        <button
+          className={`${styles.btn} ${styles.continueBtn}`}
+          onClick={onContinue}
+          aria-label={continueLabel}
+        >
+          <span className={styles.label}>{continueLabel}</span>
+          <span className={styles.arrowWrap}>
+            <ArrowDown
+              className={`${styles.arrowSvg} ${styles.continueArrow}`}
+              aria-hidden="true"
+              width={16}
+              height={16}
+            />
+            <ArrowDown
+              className={`${styles.arrowSvg} ${styles.continueClone}`}
+              aria-hidden="true"
+              width={16}
+              height={16}
+            />
+          </span>
+        </button>
+      )}
 
     </div>
   )

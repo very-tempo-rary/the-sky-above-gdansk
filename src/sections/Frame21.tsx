@@ -80,16 +80,15 @@ export default function Frame21() {
     const frame4 = document.getElementById('frame4')
     if (!frame4) return
 
-    // Set Frame4 invisible at y:0 BEFORE scrolling so the ResizeObserver fires
-    // (and the layout width settles) while it's hidden at its natural position.
-    // Two rAFs let that settle, then the animation starts with y:56 applied as a
-    // CSS transform (doesn't affect document layout, so no width jump).
-    // Body is temporarily #087BFF so there is no dark-body flash during the fade.
+    // Animate #frame4-wrap (wrapper div), not #frame4 itself.
+    // The wrapper has no overflow:hidden so y:56 does not trigger Frame4's
+    // internal ResizeObserver → map width stays stable.
+    const absTop = Math.round(frame4.getBoundingClientRect().top + window.scrollY)
     document.body.style.backgroundColor = '#087BFF'
-    gsap.set('#frame4', { opacity: 0 })
-    window.scrollTo({ top: frame4.offsetTop, behavior: 'instant' })
+    gsap.set('#frame4-wrap', { opacity: 0 })
+    window.scrollTo({ top: absTop, behavior: 'instant' })
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      gsap.fromTo('#frame4',
+      gsap.fromTo('#frame4-wrap',
         { opacity: 0, y: 56 },
         {
           opacity: 1, y: 0, duration: 0.55, ease: 'power3.out',
@@ -118,9 +117,9 @@ export default function Frame21() {
 
     tl.to(fortunatelyRef.current, { opacity: 0,               ease: 'power1.out',   duration: 1.5 }, DELAY)
     tl.to(sceneRef.current,       { backgroundColor: '#087bff', ease: 'none',        duration: 3.0 }, DELAY)
-    tl.to(cloud1Ref.current,      { x: -700, opacity: 0,      ease: 'power1.inOut', duration: 2.5 }, DELAY)
-    tl.to(cloud2Ref.current,      { x: +700, opacity: 0,      ease: 'power1.inOut', duration: 2.5 }, DELAY)
-    tl.to(cloud3Ref.current,      { x: +700, opacity: 0,      ease: 'power1.inOut', duration: 2.5 }, DELAY)
+    tl.to(cloud1Ref.current,      { x: -700, opacity: 0,      ease: 'power1.inOut', duration: 4.0 }, DELAY)
+    tl.to(cloud2Ref.current,      { x: +700, opacity: 0,      ease: 'power1.inOut', duration: 4.0 }, DELAY)
+    tl.to(cloud3Ref.current,      { x: +700, opacity: 0,      ease: 'power1.inOut', duration: 4.0 }, DELAY)
     tl.to(headingRef.current,     { opacity: 1, y: 0,         ease: 'power1.out',   duration: 1.1 }, DELAY + 1.5)
     tl.to(para1Ref.current,       { opacity: 1, y: 0,         ease: 'power1.out',   duration: 1.1 }, DELAY + 2.3)
     // Birds enter from bottom-left. Position and opacity tweens start together so
@@ -154,7 +153,7 @@ export default function Frame21() {
     // ── Smooth-scrub ticker ─────────────────────────────────────────────────
     const ticker: gsap.TickerCallback = () => {
       const diff = targetRef.current - currentRef.current
-      if (Math.abs(diff) < 0.0001) {
+      if (Math.abs(diff) < 0.005) {
         // At rest past the bird-landing point, and not mid-navigation — start blinking
         if (currentRef.current >= BLINK_START && !blinkingRef.current && !navigating.current) {
           blinkingRef.current = true

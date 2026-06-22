@@ -1,6 +1,7 @@
 @import '@fontsource/source-serif-4/400.css';
 @import '@fontsource/source-serif-4/400-italic.css';
 @import '@fontsource/source-code-pro/500.css';
+@import '@fontsource/source-code-pro/700.css';
 
 *, *::before, *::after {
   box-sizing: border-box;
