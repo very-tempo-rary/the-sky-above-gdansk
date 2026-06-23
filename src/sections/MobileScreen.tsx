@@ -10,7 +10,7 @@ export default function MobileScreen() {
         <img src={monitorIcon} alt="" className={styles.icon} draggable={false} />
         <p className={styles.text}>
           This site needs more space to spread its wings!
-          Please switch to a computer screen.
+          Please switch to a computer screen or resize the browser window.
         </p>
         <p className={styles.text}>
           Mobile experience coming later in the year.
