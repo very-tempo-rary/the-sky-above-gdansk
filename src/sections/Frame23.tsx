@@ -53,8 +53,9 @@ export default function Frame23() {
         <div ref={scrollInnerRef} className={styles.scrollInner}>
           <div className={styles.column}>
 
-            <p className={styles.byLine}>By Alicja Kot, 2026</p>
-            <p className={styles.translationNote}>All translations to English are my own.</p>
+            <p className={styles.byLine}>Thank you!</p>
+            <p className={styles.byLine}>Alicja Kot, 2026</p>
+            <p className={styles.byLine}>All translations to English are my own.</p>
 
             {/* ── SOURCES ─────────────────────────────────────────────────── */}
             <div className={styles.section}>

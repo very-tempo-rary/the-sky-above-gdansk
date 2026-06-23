@@ -305,7 +305,8 @@ export default function Frame4() {
     if (!frame23) return
     document.body.style.backgroundColor = '#087BFF'
     gsap.set('#frame23', { opacity: 0 })
-    window.scrollTo({ top: frame23.offsetTop, behavior: 'instant' })
+    const absTop = Math.round(frame23.getBoundingClientRect().top + window.scrollY)
+    window.scrollTo({ top: absTop, behavior: 'instant' })
     gsap.fromTo('#frame23',
       { opacity: 0, y: 56 },
       {

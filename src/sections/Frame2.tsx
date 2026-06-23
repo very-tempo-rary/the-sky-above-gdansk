@@ -4,8 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import styles from './Frame2.module.css'
 import BirdsLayer from './BirdsLayer'
 
-import polandSvg  from '@assets/svg/intro/poland-vector.svg'
-import gdanskSvg  from '@assets/svg/intro/gdansk-vector.svg'
+import PolandSvg  from '@assets/svg/intro/poland-vector.svg?react'
+import GdanskSvg  from '@assets/svg/intro/gdansk-vector.svg?react'
 import Cracked    from '@assets/svg/intro/gdansk-vector-cracked.svg?react'
 import CrackedAlt from '@assets/svg/intro/gdansk-vector-cracked-alt.svg?react'
 
@@ -20,8 +20,8 @@ export default function Frame2() {
   const para3Ref       = useRef<HTMLParagraphElement>(null)
   // Egg
   const eggRef         = useRef<HTMLDivElement>(null)
-  const polandRef      = useRef<HTMLImageElement>(null)
-  const gdanskRef      = useRef<HTMLImageElement>(null)
+  const polandRef      = useRef<HTMLDivElement>(null)
+  const gdanskRef      = useRef<HTMLDivElement>(null)
   const labelPolandRef = useRef<HTMLDivElement>(null)
   const labelGdanskRef = useRef<HTMLDivElement>(null)
   const voronoiRef        = useRef<HTMLDivElement>(null)
@@ -33,6 +33,7 @@ export default function Frame2() {
   const zoomGroupRef      = useRef<HTMLDivElement>(null)
   const zoomTitleRef      = useRef<HTMLHeadingElement>(null)
   const zoomBodyRef       = useRef<HTMLParagraphElement>(null)
+  const keepScrollingRef  = useRef<HTMLParagraphElement>(null)
 
   useEffect(() => {
     const wrapper        = wrapperRef.current
@@ -53,10 +54,11 @@ export default function Frame2() {
     const zoomGroup      = zoomGroupRef.current
     const zoomTitle      = zoomTitleRef.current
     const zoomBody       = zoomBodyRef.current
+    const keepScrolling  = keepScrollingRef.current
     if (!wrapper || !stat || !divider || !textGroup || !para2 || !para3 ||
         !egg || !poland || !gdansk || !labelPoland || !labelGdansk ||
         !voronoi || !voronoiLabels || !crackedOrig || !crackedAlt ||
-        !zoomGroup || !zoomTitle || !zoomBody) return
+        !zoomGroup || !zoomTitle || !zoomBody || !keepScrolling) return
 
     // ── Initial states ──────────────────────────────────────────────────────
     // Zoom target: city-outline crack — the complex boundary between the two
@@ -140,8 +142,9 @@ export default function Frame2() {
     // body (≈130px) + gap (48px) are still invisible.
     // When body fades in, y→0 re-centres the full 245px block.
     gsap.set(zoomGroup,   { xPercent: -50, yPercent: -50, y: 89 })
-    gsap.set(zoomTitle,   { opacity: 0 })
-    gsap.set(zoomBody,    { opacity: 0 })
+    gsap.set(zoomTitle,      { opacity: 0 })
+    gsap.set(zoomBody,       { opacity: 0 })
+    gsap.set(keepScrolling,  { opacity: 1 })
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -155,6 +158,9 @@ export default function Frame2() {
     // ── t=0→2: dwell — "339 species" centred, birds fly in/out ─────────────
     // Birds handled by BirdsLayer (separate ScrollTrigger). Stat is still.
     // Birds exit before t=2; only then does the stat start moving.
+
+    // ── t=0→2: fade out (Keep scrolling) hint as layout starts filling ───────
+    tl.to(keepScrolling, { opacity: 0, duration: 0.6 }, 2)
 
     // ── Phase 2→3: stat + divider slide in ──────────────────────────────────
     const targetX = eggCentreX - window.innerWidth / 2
@@ -273,14 +279,22 @@ export default function Frame2() {
           </p>
         </div>
 
+        {/* ── (Keep scrolling) hint ────────────────────────────────────── */}
+        <p ref={keepScrollingRef} className={styles.keepScrolling} aria-hidden="true">
+          (Keep scrolling)
+        </p>
+
         {/* ── Egg chart ─────────────────────────────────────────────────── */}
         <div className={styles.egg} ref={eggRef}>
 
-          <img src={polandSvg} className={styles.polandSvg} ref={polandRef}
-            alt="" aria-hidden="true" draggable={false} />
+          {/* Wrapper divs keep refs for GSAP; inline SVGs stay vector-crisp in Firefox */}
+          <div ref={polandRef} className={styles.polandSvg} aria-hidden="true">
+            <PolandSvg style={{ width: '100%', height: '100%', display: 'block' }} />
+          </div>
 
-          <img src={gdanskSvg} className={styles.gdanskSvg} ref={gdanskRef}
-            alt="" aria-hidden="true" draggable={false} />
+          <div ref={gdanskRef} className={styles.gdanskSvg} aria-hidden="true">
+            <GdanskSvg style={{ width: '100%', height: '100%', display: 'block' }} />
+          </div>
 
           <div className={styles.labelPoland} ref={labelPolandRef}>
             <span>Poland</span>

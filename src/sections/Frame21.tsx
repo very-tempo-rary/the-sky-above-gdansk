@@ -12,11 +12,12 @@ import swift3 from '@assets/svg/additional/add-swift-3.svg'
 import swift4 from '@assets/svg/additional/add-swift-4.svg'
 
 export default function Frame21() {
-  const sceneRef       = useRef<HTMLElement>(null)
-  const cloud1Ref      = useRef<HTMLImageElement>(null)
-  const cloud2Ref      = useRef<HTMLImageElement>(null)
-  const cloud3Ref      = useRef<HTMLImageElement>(null)
-  const fortunatelyRef = useRef<HTMLParagraphElement>(null)
+  const sceneRef         = useRef<HTMLElement>(null)
+  const cloud1Ref        = useRef<HTMLImageElement>(null)
+  const cloud2Ref        = useRef<HTMLImageElement>(null)
+  const cloud3Ref        = useRef<HTMLImageElement>(null)
+  const fortunatelyRef   = useRef<HTMLParagraphElement>(null)
+  const keepScrollingRef = useRef<HTMLParagraphElement>(null)
   const headingRef     = useRef<HTMLHeadingElement>(null)
   const para1Ref       = useRef<HTMLParagraphElement>(null)
   const para2Ref       = useRef<HTMLParagraphElement>(null)
@@ -44,6 +45,7 @@ export default function Frame21() {
       { x: 0, opacity: 1 },
     )
     gsap.set(fortunatelyRef.current, { opacity: 1 })
+    gsap.set(keepScrollingRef.current, { opacity: 1 })
     gsap.set(
       [headingRef.current, para1Ref.current, para2Ref.current],
       { opacity: 0, y: 30 },
@@ -74,6 +76,7 @@ export default function Frame21() {
     blinkingRef.current = false
     blinkTlRef.current?.pause()
     gsap.set([bird1Ref.current, bird2Ref.current, bird3Ref.current, bird4Ref.current], { opacity: 1 })
+    gsap.to(keepScrollingRef.current, { opacity: 0, duration: 0.3 })
     targetRef.current  = 1
     currentRef.current = 1
     tlRef.current?.progress(1)
@@ -261,6 +264,11 @@ export default function Frame21() {
       <img ref={bird2Ref} src={swift2} alt="" className={`${styles.bird} ${styles.bird2}`} draggable={false} />
       <img ref={bird3Ref} src={swift3} alt="" className={`${styles.bird} ${styles.bird3}`} draggable={false} />
       <img ref={bird4Ref} src={swift4} alt="" className={`${styles.bird} ${styles.bird4}`} draggable={false} />
+
+      {/* ── (Keep scrolling) hint ────────────────────────────────────────── */}
+      <p ref={keepScrollingRef} className={styles.keepScrolling} aria-hidden="true">
+        (Keep scrolling)
+      </p>
 
       {/* ── "Slowly moving back in" text block ────────────────────────────── */}
       <div className={styles.textContent}>

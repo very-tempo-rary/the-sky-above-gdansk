@@ -266,3 +266,21 @@
 
 .labelPct  { font-size: 29px; }
 .labelName { font-size: 19px; }
+
+/* ── (Keep scrolling) hint ─────────────────────────────────────────────────── */
+.keepScrolling {
+  position: absolute;
+  bottom: 49px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+}

@@ -41,7 +41,8 @@
       "Bash(python -c ' *)",
       "Bash(node_modules/.bin/vite build *)",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
-      "Bash(for f *)"
+      "Bash(for f *)",
+      "PowerShell($proc = Get-NetTCPConnection -LocalPort 5173 -ErrorAction SilentlyContinue | Select-Object -First 1; if \\($proc\\) { Stop-Process -Id $proc.OwningProcess -Force; Write-Output \"Killed PID $\\($proc.OwningProcess\\)\" } else { Write-Output \"Nothing on 5173\" })"
     ]
   },
   "hooks": {

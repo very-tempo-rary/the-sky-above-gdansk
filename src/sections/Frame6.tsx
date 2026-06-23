@@ -23,6 +23,7 @@ export default function Frame6() {
   const para1Ref         = useRef<HTMLDivElement>(null)
   const rainRef          = useRef<HTMLDivElement>(null)
   const para2Ref         = useRef<HTMLDivElement>(null)
+  const keepScrollingRef = useRef<HTMLParagraphElement>(null)
 
   const tlRef        = useRef<gsap.core.Timeline | null>(null)
   const targetRef    = useRef(0)   // target progress 0–1 (driven by wheel)
@@ -35,6 +36,7 @@ export default function Frame6() {
     gsap.set(textContainerRef.current, { y: TEXT_DY })
     gsap.set([para1Ref.current, para2Ref.current], { opacity: 0, y: 30 })
     gsap.set(rainRef.current, { opacity: 0, y: -30 })
+    gsap.set(keepScrollingRef.current, { opacity: 1 })
   }
 
   // ── Navigation helpers ────────────────────────────────────────────────────
@@ -51,6 +53,7 @@ export default function Frame6() {
   }
 
   function goToFrame7() {
+    gsap.to(keepScrollingRef.current, { opacity: 0, duration: 0.3 })
     targetRef.current  = 1
     currentRef.current = 1
     tlRef.current?.progress(1)
@@ -200,6 +203,11 @@ export default function Frame6() {
           But it has also unintentionally harmed our feathery<br />co-tenants.
         </div>
       </div>
+
+      {/* ── (Keep scrolling) hint ────────────────────────────────────────── */}
+      <p ref={keepScrollingRef} className={styles.keepScrolling} aria-hidden="true">
+        (Keep scrolling)
+      </p>
 
       {/* ── Rain (centred on 1440-px Figma canvas) ────────────────────────── */}
       {/* Rain 1: Figma x=26  → left = calc(50% − (720−26)px) = calc(50% − 694px) */}
